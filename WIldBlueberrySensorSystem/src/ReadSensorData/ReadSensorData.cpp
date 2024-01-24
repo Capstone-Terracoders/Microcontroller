@@ -1,5 +1,8 @@
 #include "ReadSensorData.h"
 
+ReadSensorData::ReadSensorData()
+{
+}
 ReadSensorData::ReadSensorData(std::map<std::string, std::unique_ptr<Sensor>> *sensors)
     : _sensors(sensors)
 {

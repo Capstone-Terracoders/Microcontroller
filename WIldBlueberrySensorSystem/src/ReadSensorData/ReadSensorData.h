@@ -1,3 +1,7 @@
+//
+// Class: ReadSensorData
+// Description: This class is used to read the sensor data from the sensors
+//
 #ifndef READSENSORDATA_H
 #define READSENSORDATA_H
 
@@ -9,6 +13,7 @@
 class ReadSensorData
 {
 public:
+    ReadSensorData();
     ReadSensorData(std::map<std::string, std::unique_ptr<Sensor>> *sensors);
     ~ReadSensorData();
 

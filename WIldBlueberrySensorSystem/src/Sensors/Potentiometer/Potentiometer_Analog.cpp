@@ -10,7 +10,7 @@ Potentiometer_Analog::~Potentiometer_Analog() {}
 
 float Potentiometer_Analog::readData()
 {
-    return static_cast<float>(analogRead(_data_pin));
+    return analogRead(_data_pin);
 }
 
 int Potentiometer_Analog::getPin()

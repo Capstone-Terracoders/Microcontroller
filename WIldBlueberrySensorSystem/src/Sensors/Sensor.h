@@ -1,9 +1,15 @@
+//
+// Class: Sensor
+// Description: This class defines the interface for a Sensor
+//
 #ifndef Sensor_h
 #define Sensor_h
 
 #include "Arduino.h"
 #include <iostream>
 
+// This is the type of sensor
+// Add to this list when a new sensor is created
 enum class SensorType
 {
     ULTRASONIC,
@@ -11,6 +17,7 @@ enum class SensorType
     POTENTIOMETER,
 };
 
+// This is the type of signal used by the sensor
 enum class SignalType
 {
     ANALOG,
@@ -23,9 +30,9 @@ public:
     // Mutators
     virtual SensorType getType() const = 0;
     virtual SignalType getSignalType() const = 0;
-    virtual std::string getName();
-    virtual std::string getID();
-    virtual float readData() = 0; // This gets the sensor data
+    virtual std::string getName(); // This gets the sensor name
+    virtual std::string getID();   // This gets the sensor ID
+    virtual float readData() = 0;  // This gets the sensor data
     // accessors
     virtual void setName(const std::string &name);
     virtual void setID(const std::string &id);

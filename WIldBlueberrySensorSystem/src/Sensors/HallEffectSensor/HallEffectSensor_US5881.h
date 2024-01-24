@@ -1,3 +1,7 @@
+//
+// Class: HallEffectSensor_US5881
+// Description: This class is used to read data from a US5881 Hall Effect Sensor
+//
 #ifndef HallEffectSensor_US5881_h
 #define HallEffectSensor_US5881_h
 
@@ -7,10 +11,9 @@ class HallEffectSensor_US5881 : public HallEffectSensor
 {
 public:
     // constructor
-    // const reference pass because the values w and h don't change and reference avoid the time it takes to copy large
-    //   objects by value (if there were any)
-    // UltrasonicSensor_HCSR04();
     HallEffectSensor_US5881(const int &pin);
+
+    // sets the signal type to digital
     SignalType getSignalType() const override
     {
         return SignalType::DIGITAL;

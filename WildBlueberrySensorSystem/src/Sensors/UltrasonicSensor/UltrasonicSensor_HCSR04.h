@@ -5,26 +5,26 @@ class UltrasonicSensor_HCSR04 : public UltrasonicSensor
 {
 public:
     // constructor
-    // const reference pass because the values w and h don't change and reference avoid the time it takes to copy large
-    //   objects by value (if there were any)
     // UltrasonicSensor_HCSR04();
     UltrasonicSensor_HCSR04(const int &echo_pin, const int &trigger_pin);
+    // set the signal type to digital
     SignalType getSignalType() const override
     {
         return SignalType::DIGITAL;
     }
     // destructor
     virtual ~UltrasonicSensor_HCSR04();
-
+    // Accessors
     float readData() override; // This gets the ultrasonic sensor data
     int getEchoPin();
     int getTriggerPin();
 
+    // Mutators
     void setEchoPin(const int &pin);
     void setTriggerPin(const int &pin);
 
 private:
-    int _echo_pin = 0;
-    int _trigger_pin = 1;
+    int _echo_pin = 0;    // echo pin receives the signal
+    int _trigger_pin = 1; // trigger pin transmits the signal
 };
 #endif

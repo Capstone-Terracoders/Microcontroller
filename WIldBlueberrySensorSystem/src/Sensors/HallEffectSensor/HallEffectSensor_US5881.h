@@ -20,9 +20,11 @@ public:
     }
     // destructor
     virtual ~HallEffectSensor_US5881();
-
+    // Accessors
     float readData() override; // This gets the ultrasonic sensor data
     int getPin();
+
+    // Mutators
     void setPin(const int &pin);
 
 private:

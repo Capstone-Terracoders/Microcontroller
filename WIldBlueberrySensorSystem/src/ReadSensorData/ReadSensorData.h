@@ -17,6 +17,7 @@ public:
     ReadSensorData(std::map<std::string, std::unique_ptr<Sensor>> *sensors);
     ~ReadSensorData();
 
+    // Accessors
     float getHarvesterLinearSpeedData();
     float getRakeRotationSpeedData();
     float getRakeHeightData();

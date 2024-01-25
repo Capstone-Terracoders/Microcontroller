@@ -14,11 +14,12 @@ public:
     }
     // destructor
     virtual ~UltrasonicSensor_HCSR04();
-
+    // Accessors
     float readData() override; // This gets the ultrasonic sensor data
     int getEchoPin();
     int getTriggerPin();
 
+    // Mutators
     void setEchoPin(const int &pin);
     void setTriggerPin(const int &pin);
 

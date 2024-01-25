@@ -22,9 +22,9 @@ public:
     }
     // destructor
     virtual ~Potentiometer_Analog();
-
+    // Mutators
     void setPin(int pin);
-
+    // Accessors
     int getPin();
     float readData() override; // This gets the potentiometer data
 private:

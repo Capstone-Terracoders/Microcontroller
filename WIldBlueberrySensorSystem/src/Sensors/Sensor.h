@@ -27,13 +27,13 @@ enum class SignalType
 class Sensor
 {
 public:
-    // Mutators
+    // accessors
     virtual SensorType getType() const = 0;
     virtual SignalType getSignalType() const = 0;
     virtual std::string getName(); // This gets the sensor name
     virtual std::string getID();   // This gets the sensor ID
     virtual float readData() = 0;  // This gets the sensor data
-    // accessors
+    // Mutators
     virtual void setName(const std::string &name);
     virtual void setID(const std::string &id);
 

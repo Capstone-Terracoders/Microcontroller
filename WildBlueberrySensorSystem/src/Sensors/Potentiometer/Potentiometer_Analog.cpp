@@ -1,4 +1,4 @@
-#include "Potentiometer_Analog.h"
+#include "./Sensors/Potentiometer/Potentiometer_Analog.h"
 // constructor
 Potentiometer_Analog::Potentiometer_Analog(int pin) : _data_pin(pin)
 {

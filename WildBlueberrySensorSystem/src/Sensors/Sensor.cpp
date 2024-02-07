@@ -1,4 +1,4 @@
-#include "Sensor.h"
+#include "./Sensors/Sensor.h"
 
 std::string Sensor::getName()
 {

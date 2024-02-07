@@ -1,5 +1,4 @@
-#include "HallEffectSensor_NJK5002C.h"
-#include "Arduino.h"
+#include "./Sensors/HallEffectSensor/HallEffectSensor_NJK5002C.h"
 
 // constructor
 HallEffectSensor_NJK5002C::HallEffectSensor_NJK5002C(const int &pin)

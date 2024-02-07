@@ -5,9 +5,19 @@
 import os
 import json
 import fileinput
+import platform
 
+def get_platformio_directory():
+    if platform.system() == "Windows":
+        return os.path.join(os.getenv('USERPROFILE'), '.platformio')
+    elif platform.system() == "Darwin":
+        return os.path.join('/Users', os.getenv('USER'), '.platformio')
+    else:
+        # Add support for other operating systems if needed
+        raise NotImplementedError("Operating system not supported")
+    
 # Define the directory path
-directory = os.path.join(os.getenv('USERPROFILE'), '.platformio', 'platforms', 'ststm32', 'boards')
+directory = os.path.join(get_platformio_directory(),  'platforms', 'ststm32', 'boards')
 
 # Define the file path
 file_path = os.path.join(directory, 'giga.json')
@@ -92,7 +102,7 @@ else:
 # Update the file ARDUINO for giga:
 
 # Define the directory path
-directory = os.path.join(os.getenv('USERPROFILE'), '.platformio', 'platforms', 'ststm32', 'builder', 'frameworks', 'arduino', 'mbed-core')
+directory = os.path.join(get_platformio_directory(), 'platforms', 'ststm32', 'builder', 'frameworks', 'arduino', 'mbed-core')
 
 file_name = 'arduino-core-mbed.py'
 # Define the file path
@@ -126,7 +136,7 @@ print(f"File '{file_name}' modified successfully.")
 # Update STSTM32 platform.py:
 ######
 # Define the directory path
-directory = os.path.join(os.getenv('USERPROFILE'), '.platformio', 'platforms', 'ststm32')
+directory = os.path.join(get_platformio_directory(), 'platforms', 'ststm32')
 
 file_name = 'platform.py'
 # Define the file path

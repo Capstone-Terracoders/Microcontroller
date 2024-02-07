@@ -1,4 +1,4 @@
-#include "UtlrasonicSensor_MB1010.h"
+#include "UltrasonicSensor_MB1010.h"
 
 // constructor
 UltrasonicSensor_MB1010::UltrasonicSensor_MB1010(const int &data_pin)

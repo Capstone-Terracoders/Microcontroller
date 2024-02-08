@@ -8,7 +8,7 @@
 #include <map>
 #include <memory>
 #include <string>
-#include "../Sensors/Sensor.h" // Include the header for the Sensor class
+#include "./Sensors/Sensor.h" // Include the header for the Sensor class
 
 class ReadSensorData
 {

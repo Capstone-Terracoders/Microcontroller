@@ -1,4 +1,4 @@
-#include "UltrasonicSensor_HCSR04.h"
+#include "./Sensors/UltrasonicSensor/UltrasonicSensor_HCSR04.h"
 // constructor
 UltrasonicSensor_HCSR04::UltrasonicSensor_HCSR04(const int &echo_pin, const int &trigger_pin)
 {

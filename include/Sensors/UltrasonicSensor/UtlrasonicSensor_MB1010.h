@@ -20,7 +20,7 @@
 //  Purple  - PW (pulse width)
 //  Blue    - BW ()
 #ifndef UltrasonicSensor_MB1010_H
-#define UltrasonicSensor_MB1010_H
+#define UtlrasonicSensor_MB1010_H
 
 #include "UltrasonicSensor.h"
 class UltrasonicSensor_MB1010 : public UltrasonicSensor

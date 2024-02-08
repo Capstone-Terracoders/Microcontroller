@@ -4,7 +4,7 @@
 //
 #ifndef HALLEFFECTSENSOR_H
 #define HALLEFFECTSENSOR_H
-#include "../Sensor.h"
+#include "./Sensors/Sensor.h"
 class HallEffectSensor : public Sensor
 {
 public:

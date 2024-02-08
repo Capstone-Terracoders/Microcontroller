@@ -10,10 +10,10 @@
 #include <memory>
 #include <string>
 
-#include "src/Sensors/Potentiometer/Potentiometer_Analog.h"
-#include "src/Sensors/HallEffectSensor/HallEffectSensor_NJK5002C.h"
-#include "src/Sensors/UltrasonicSensor/UtlrasonicSensor_MB1010.h"
+#include "./Sensors/HallEffectSensor/HallEffectSensor_NJK5002C.h"
+#include "./Sensors/Potentiometer/Potentiometer_Analog.h"
+#include "./Sensors/UltrasonicSensor/UtlrasonicSensor_MB1010.h"
 
-#include "src/ReadSensorData/ReadSensorData.h"
+#include "./ReadSensorData/ReadSensorData.h"
 
 #endif

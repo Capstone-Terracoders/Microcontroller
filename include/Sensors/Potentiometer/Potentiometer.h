@@ -4,7 +4,7 @@
 //
 #ifndef POTENTIOMETER_H
 #define POTENTIOMETER_H
-#include "../Sensor.h"
+#include "./Sensors/Sensor.h"
 class Potentiometer : public Sensor
 {
     // set the sensor type to potentiometer

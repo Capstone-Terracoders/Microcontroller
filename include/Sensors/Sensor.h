@@ -5,7 +5,6 @@
 #ifndef Sensor_h
 #define Sensor_h
 
-#include "Arduino.h"
 #include <iostream>
 
 // This is the type of sensor

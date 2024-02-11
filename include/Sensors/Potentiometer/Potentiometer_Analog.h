@@ -9,6 +9,7 @@
 #ifndef POTENTIOMETER_ANALOG_H
 #define POTENTIOMETER_ANALOG_H
 #include "Potentiometer.h"
+#include "Arduino.h"
 
 class Potentiometer_Analog : public Potentiometer
 {

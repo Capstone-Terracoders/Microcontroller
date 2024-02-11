@@ -9,6 +9,7 @@
 #ifndef HallEffectSensor_NJK5002C_h
 #define HallEffectSensor_NJK5002C_h
 #include "HallEffectSensor.h"
+#include "Arduino.h"
 
 class HallEffectSensor_NJK5002C : public HallEffectSensor
 {

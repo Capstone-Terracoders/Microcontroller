@@ -1,4 +1,3 @@
-#include "Arduino.h"
 #include "WildBlueberrySensorSystem.h"
 // Define sensors pin locations
 #define RAKESPEED_PIN 8
@@ -14,7 +13,6 @@ std::map<std::string, std::unique_ptr<Sensor>> sensors;
 
 // Read Sensor Data
 ReadSensorData readSensorData;
-
 
 /// Define the sensors being used and set them up
 void sensorSetup()

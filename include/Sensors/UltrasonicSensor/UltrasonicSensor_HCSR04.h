@@ -1,6 +1,8 @@
 #ifndef ULTRASONICSENSOR_HCSR04_H
 #define ULTRASONICSENSOR_HCSR04_H
 #include "UltrasonicSensor.h"
+#include "Arduino.h"
+
 class UltrasonicSensor_HCSR04 : public UltrasonicSensor
 {
 public:

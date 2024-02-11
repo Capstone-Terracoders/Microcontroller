@@ -23,6 +23,7 @@
 #define UtlrasonicSensor_MB1010_H
 
 #include "UltrasonicSensor.h"
+#include "Arduino.h"
 class UltrasonicSensor_MB1010 : public UltrasonicSensor
 {
 public:

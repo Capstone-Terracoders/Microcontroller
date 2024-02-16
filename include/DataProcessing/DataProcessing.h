@@ -17,7 +17,7 @@ public:
     ~DataProcessing();
 
     // Accessors
-    float calculateRakeHeight(int rakeHeightData, int heightOfRake);
+    float calculateRakeHeight(int rakeHeightData, float heightOfRake, int maxDataValue, int minDataValue);
     float calculateBushHeight(int bushHeightData);
     float calculateRakeRotationalSpeed(int rakeRotationSpeedData, int divisionOfCircle, int radiusOfRake);
     float calculateHavesterLinearSpeed(int harvesterLinearSpeedData, int radiusOfHavesterWheel, int timeOfRotation);
@@ -28,6 +28,7 @@ private:
     float _rakeRotationalSpeed = 0.0f;
     float _harvesterLinearSpeed = 0.0f;
     unsigned long int _tprev_RakeRotationalSpeed = 0.0f;
+    unsigned long int _tprev_HarvesterLinearSpeed = 0.0f;
     unsigned long int _dt_RakeRotationalSpeed = 0.0f;
     unsigned long int _dt_HarvesterLinearSpeed = 0.0f;
     bool _rakeRotationalSpeedSwitch = false;

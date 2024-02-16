@@ -68,7 +68,7 @@ void loop()
   // Data processing
 
   float rakeRPM = dataProcessing.calculateRakeRotationalSpeed(readSensorData.getRakeRotationSpeedData(), 1, 0.1);  // Calculate the rotational speed of the rake
-  float rake_height = dataProcessing.calculateRakeHeight(readSensorData.getRakeHeightData(), 0.3); // Calculate the height of the rake
+  float rake_height = dataProcessing.calculateRakeHeight(readSensorData.getRakeHeightData(), 0.3, 1023, 0); // Calculate the height of the rake
   Serial.print("Rake Rotational Speed: ");
   Serial.println(rakeRPM); // Prints the calculated rotational speed of the rake
   Serial.print("Rake Height: ");

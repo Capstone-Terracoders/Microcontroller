@@ -7,8 +7,19 @@ DataProcessing::~DataProcessing() {}
 // rakeHeightData: The data from the rake_height sensor
 // heightOfRake: The height of the rake in meters
 // returns the height of the rake in meters
-float DataProcessing::calculateRakeHeight(int rakeHeightData, int heightOfRake) {
-    return heightOfRake / rakeHeightData;
+float DataProcessing::calculateRakeHeight(int rakeHeightData, float heightOfRake, int maxDataValue, int minDataValue) {
+    // Adjust the data to the max and min values
+    // These are bounds set for the sensor in case the sensor cannot complete the full range
+    if(rakeHeightData > maxDataValue){
+        rakeHeightData = maxDataValue;
+    } else if(rakeHeightData < minDataValue){
+        rakeHeightData = minDataValue;
+    }
+    // Shift rakeHeightData by the minDataValue
+    float adjustedHeightRakeData = float(rakeHeightData)-float(minDataValue);
+    // Shift the maxDataValue by the minDataValue
+    float adjustedMaxDataValue = float(maxDataValue)-float(minDataValue);
+    return heightOfRake * (adjustedHeightRakeData/adjustedMaxDataValue);
 }
 
 float DataProcessing::calculateBushHeight(int bushHeightData) {

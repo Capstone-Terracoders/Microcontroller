@@ -15,6 +15,11 @@ std::map<std::string, std::unique_ptr<Sensor>> sensors;
 // Read Sensor Data
 ReadSensorData readSensorData;
 
+// Data Processing
+DataProcessing dataProcessing;
+
+// Elapsed time 
+unsigned long int dt = 0;
 
 /// Define the sensors being used and set them up
 void sensorSetup()
@@ -45,16 +50,28 @@ void setup()
   sensorSetup();
   // Instantiate readSensorData using the sensors map
   readSensorData = ReadSensorData(&sensors);
+  dataProcessing = DataProcessing();
 }
-
+// #define DEBUG
 void loop()
 {
-  // This is debug code to test the functionality of sensors
+  // This is debug code to test the functionality of sensors 
+  #ifdef DEBUG
   Serial.println("Rake Speed | Pot    | Ultrasonic Sensor");
   Serial.print(readSensorData.getRakeRotationSpeedData(), 2); // Prints the raw data from the rotational speed of the rake
   Serial.print("       |");
   Serial.print(readSensorData.getRakeHeightData(), 2); // Prints the raw data from the rake height sensor
   Serial.print("    |");
   Serial.println(readSensorData.getBushHeightData(), 2); // Prints the raw data from the blueberry bush height sensor
+  #endif
+
+  // Data processing
+
+  float rakeRPM = dataProcessing.calculateRakeRotationalSpeed(readSensorData.getRakeRotationSpeedData(), 1, 0.1);  // Calculate the rotational speed of the rake
+  float rake_height = dataProcessing.calculateRakeHeight(readSensorData.getRakeHeightData(), 0.3); // Calculate the height of the rake
+  Serial.print("Rake Rotational Speed: ");
+  Serial.println(rakeRPM); // Prints the calculated rotational speed of the rake
+  Serial.print("Rake Height: ");
+  Serial.println(rake_height); // Prints the calculated height of the rake
   delay(1000);                                           // Delays for 1000 miliseconds
 }

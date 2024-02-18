@@ -62,6 +62,13 @@ void setup()
 // #define DEBUG
 void loop()
 {
+  
+  // Data processing
+  float rakeRPM = dataProcessing.calculateRakeRotationalSpeed(readSensorData.getRakeRotationSpeedData(), 1, 0.1);  // Calculate the rotational speed of the rake
+  float rakeHeight = dataProcessing.calculateRakeHeight(readSensorData.getRakeHeightData(), 0.3, 1000, 0); // Calculate the height of the rake
+  float blueberryBushHeight = dataProcessing.calculateBushHeight(readSensorData.getBushHeightData(), 1); // Calculate the height of the rake
+  float harvesterLinearSpeed = dataProcessing.calculateHavesterLinearSpeed(readSensorData.getHarvesterLinearSpeedData(), 1, 0.2); // Calculate the linear speed of the harvester
+  // Debugging
   if (millis() - dt > 1000)
   {
     dt = millis();
@@ -77,13 +84,6 @@ void loop()
   Serial.println(readSensorData.getBushHeightData(), 2); // Prints the raw data from the blueberry bush height sensor
   
   #endif
-
-  // Data processing
-  float rakeRPM = dataProcessing.calculateRakeRotationalSpeed(readSensorData.getRakeRotationSpeedData(), 1, 0.1);  // Calculate the rotational speed of the rake
-  float rakeHeight = dataProcessing.calculateRakeHeight(readSensorData.getRakeHeightData(), 0.3, 1000, 0); // Calculate the height of the rake
-  float blueberryBushHeight = dataProcessing.calculateBushHeight(readSensorData.getBushHeightData(), 1); // Calculate the height of the rake
-  float harvesterLinearSpeed = dataProcessing.calculateHavesterLinearSpeed(readSensorData.getHarvesterLinearSpeedData(), 1, 0.2); // Calculate the linear speed of the harvester
-
   Serial.println("Rake RPM | Harvester Speed | Rake Height | Blueberry bush height");
   Serial.print(rakeRPM); // Prints the calculated rotational speed of the rake
   Serial.print("       |");

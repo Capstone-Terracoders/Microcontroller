@@ -89,7 +89,6 @@ float DataProcessing::calculateHavesterLinearSpeed(int harvesterLinearSpeedData,
         _dt_HarvesterLinearSpeed = elapsed_time;
         _tprev_HarvesterLinearSpeed = current_time;
         // convert to minutes 
-        Serial.println(_dt_HarvesterLinearSpeed);
         float seconds = float(_dt_HarvesterLinearSpeed) / 1000.0f;
         _harvesterLinearSpeedSwitch = true;
         // calculate Speed of harvester

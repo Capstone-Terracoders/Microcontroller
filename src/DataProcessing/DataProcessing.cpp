@@ -22,8 +22,10 @@ float DataProcessing::calculateRakeHeight(int rakeHeightData, float heightOfRake
     return heightOfRake * (adjustedHeightRakeData/adjustedMaxDataValue);
 }
 
-float DataProcessing::calculateBushHeight(int bushHeightData) {
-    return bushHeightData;
+float DataProcessing::calculateBushHeight(int bushHeightData, float calibrationFactor) { 
+    float conversionFactor = 147.0; // Conversion factor of PWM to inches
+    float inchesToMeters = 0.0254; // Conversion factor of inches to meters
+    return (bushHeightData / conversionFactor) * inchesToMeters;
 }
 // Rake Rotational Speed
 // rakeRotationSpeedData: 1 if the rake has rotated once, 0 if the rake has not rotated

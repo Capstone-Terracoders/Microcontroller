@@ -3,7 +3,7 @@
 // Define sensors pin locations
 #define RAKESPEED_PIN 8
 #define RAKEHEIGHT_PIN A0
-#define BUSHHEIGHT_PIN A5
+#define BUSHHEIGHT_PIN 7
 // Define Sensors
 HallEffectSensor_NJK5002C rakeSpeedSensor = HallEffectSensor_NJK5002C(RAKESPEED_PIN);
 Potentiometer_Analog rakeHeightSensor = Potentiometer_Analog(RAKEHEIGHT_PIN);
@@ -66,12 +66,16 @@ void loop()
   #endif
 
   // Data processing
-
   float rakeRPM = dataProcessing.calculateRakeRotationalSpeed(readSensorData.getRakeRotationSpeedData(), 1, 0.1);  // Calculate the rotational speed of the rake
-  float rake_height = dataProcessing.calculateRakeHeight(readSensorData.getRakeHeightData(), 0.3, 1023, 0); // Calculate the height of the rake
-  Serial.print("Rake Rotational Speed: ");
-  Serial.println(rakeRPM); // Prints the calculated rotational speed of the rake
-  Serial.print("Rake Height: ");
-  Serial.println(rake_height); // Prints the calculated height of the rake
+  float rakeHeight = dataProcessing.calculateRakeHeight(readSensorData.getRakeHeightData(), 0.3, 1000, 0); // Calculate the height of the rake
+  float blueberryBushHeight = dataProcessing.calculateBushHeight(readSensorData.getBushHeightData(), 1); // Calculate the height of the rake
+ 
+  Serial.println("Rake Speed | Rake Height | Blueberry bush height");
+  Serial.print(rakeRPM); // Prints the calculated rotational speed of the rake
+  Serial.print("       |");
+  // Serial.print("Rake Height: ");
+  Serial.println(rakeHeight); // Prints the calculated height of the rake
+  Serial.print("       |");
+  Serial.println(blueberryBushHeight); // Prints the calculated height of the rake
   delay(1000);                                           // Delays for 1000 miliseconds
 }

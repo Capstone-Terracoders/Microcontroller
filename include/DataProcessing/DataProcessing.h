@@ -18,7 +18,7 @@ public:
 
     // Accessors
     float calculateRakeHeight(int rakeHeightData, float heightOfRake, int maxDataValue, int minDataValue);
-    float calculateBushHeight(int bushHeightData);
+    float calculateBushHeight(int bushHeightData, float calibrationFactor);
     float calculateRakeRotationalSpeed(int rakeRotationSpeedData, int divisionOfCircle, int radiusOfRake);
     float calculateHavesterLinearSpeed(int harvesterLinearSpeedData, int radiusOfHavesterWheel, int timeOfRotation);
 private: 

@@ -12,7 +12,7 @@ UltrasonicSensor_MB1010::~UltrasonicSensor_MB1010() {}
 
 float UltrasonicSensor_MB1010::readData()
 {
-    return analogRead(this->_data_pin);
+    return pulseIn(_data_pin, HIGH);
 }
 
 int UltrasonicSensor_MB1010::getDataPin()

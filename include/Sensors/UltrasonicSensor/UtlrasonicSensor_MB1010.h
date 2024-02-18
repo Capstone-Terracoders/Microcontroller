@@ -33,7 +33,7 @@ public:
     // set the signal type to digital
     SignalType getSignalType() const override
     {
-        return SignalType::ANALOG;
+        return SignalType::DIGITAL;
     }
 
     // destructor

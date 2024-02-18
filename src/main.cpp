@@ -2,10 +2,13 @@
 #include "WildBlueberrySensorSystem.h"
 // Define sensors pin locations
 #define RAKESPEED_PIN 8
+#define HARVESTERSPEED_PIN 9
 #define RAKEHEIGHT_PIN A0
-#define BUSHHEIGHT_PIN A5
+#define BUSHHEIGHT_PIN 7
+
 // Define Sensors
 HallEffectSensor_NJK5002C rakeSpeedSensor = HallEffectSensor_NJK5002C(RAKESPEED_PIN);
+HallEffectSensor_NJK5002C harvesterLinearSpeedSensor = HallEffectSensor_NJK5002C(HARVESTERSPEED_PIN);
 Potentiometer_Analog rakeHeightSensor = Potentiometer_Analog(RAKEHEIGHT_PIN);
 UltrasonicSensor_MB1010 bushHeightSensor = UltrasonicSensor_MB1010(BUSHHEIGHT_PIN);
 
@@ -15,6 +18,11 @@ std::map<std::string, std::unique_ptr<Sensor>> sensors;
 // Read Sensor Data
 ReadSensorData readSensorData;
 
+// Data Processing
+DataProcessing dataProcessing;
+
+// Elapsed time 
+unsigned long int dt = 0;
 
 /// Define the sensors being used and set them up
 void sensorSetup()
@@ -24,6 +32,10 @@ void sensorSetup()
   rakeSpeedSensor.setID("Rotational Speed of the rake"); // Set the id of the sensor for idenfitication
   rakeSpeedSensor.setName("rake_rotation_speed");        // Set the name of the sensor for idenfitication
   sensors.insert(std::make_pair(rakeSpeedSensor.getName(), std::make_unique<HallEffectSensor_NJK5002C>(rakeSpeedSensor)));
+
+  harvesterLinearSpeedSensor.setID("Linear Speed of the harvester"); // Set the id of the sensor for idenfitication
+  harvesterLinearSpeedSensor.setName("harvester_linear_speed");     // Set the name of the sensor for idenfitication
+  sensors.insert(std::make_pair(harvesterLinearSpeedSensor.getName(), std::make_unique<HallEffectSensor_NJK5002C>(harvesterLinearSpeedSensor)));
 
   // Ultrasonic Sensors
   bushHeightSensor.setID("Blueberry Bush Height"); // Set the id of the sensor for idenfitication
@@ -45,16 +57,41 @@ void setup()
   sensorSetup();
   // Instantiate readSensorData using the sensors map
   readSensorData = ReadSensorData(&sensors);
+  dataProcessing = DataProcessing();
 }
-
+// #define DEBUG
 void loop()
 {
-  // This is debug code to test the functionality of sensors
-  Serial.println("Rake Speed | Pot    | Ultrasonic Sensor");
+  
+  // Data processing
+  float rakeRPM = dataProcessing.calculateRakeRotationalSpeed(readSensorData.getRakeRotationSpeedData(), 1, 0.1);  // Calculate the rotational speed of the rake
+  float rakeHeight = dataProcessing.calculateRakeHeight(readSensorData.getRakeHeightData(), 0.3, 1000, 0); // Calculate the height of the rake
+  float blueberryBushHeight = dataProcessing.calculateBushHeight(readSensorData.getBushHeightData(), 1); // Calculate the height of the rake
+  float harvesterLinearSpeed = dataProcessing.calculateHavesterLinearSpeed(readSensorData.getHarvesterLinearSpeedData(), 1, 0.2); // Calculate the linear speed of the harvester
+  // Debugging
+  if (millis() - dt > 1000)
+  {
+    dt = millis();
+  // This is debug code to test the functionality of sensors 
+  #ifdef DEBUG
+  Serial.println("Rake Speed | Harvester Speed | Pot    | Ultrasonic Sensor");
   Serial.print(readSensorData.getRakeRotationSpeedData(), 2); // Prints the raw data from the rotational speed of the rake
+  Serial.print("       |");
+  Serial.print(readSensorData.getHarvesterLinearSpeedData(), 2); // Prints the raw data from the linear speed of the harvester
   Serial.print("       |");
   Serial.print(readSensorData.getRakeHeightData(), 2); // Prints the raw data from the rake height sensor
   Serial.print("    |");
   Serial.println(readSensorData.getBushHeightData(), 2); // Prints the raw data from the blueberry bush height sensor
-  delay(1000);                                           // Delays for 1000 miliseconds
+  
+  #endif
+  Serial.println("Rake RPM | Harvester Speed | Rake Height | Blueberry bush height");
+  Serial.print(rakeRPM); // Prints the calculated rotational speed of the rake
+  Serial.print("       |");
+  Serial.print(harvesterLinearSpeed); // Prints the calculated linear speed of the harvester
+  Serial.print("        |");
+  Serial.print(rakeHeight); // Prints the calculated height of the rake
+  Serial.print("        |");
+  Serial.println(blueberryBushHeight); // Prints the calculated height of the rake
+  
+  }                                           
 }

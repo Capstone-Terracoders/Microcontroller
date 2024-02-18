@@ -62,6 +62,9 @@ void setup()
 // #define DEBUG
 void loop()
 {
+  if (millis() - dt > 1000)
+  {
+    dt = millis();
   // This is debug code to test the functionality of sensors 
   #ifdef DEBUG
   Serial.println("Rake Speed | Harvester Speed | Pot    | Ultrasonic Sensor");
@@ -89,5 +92,6 @@ void loop()
   Serial.print(rakeHeight); // Prints the calculated height of the rake
   Serial.print("        |");
   Serial.println(blueberryBushHeight); // Prints the calculated height of the rake
-  delay(1000);                                           // Delays for 1000 miliseconds
+  
+  }                                           
 }

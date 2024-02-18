@@ -40,19 +40,18 @@ float DataProcessing::calculateBushHeight(int bushHeightData, float calibrationF
 // radiusOfRake: The radius of the rake meters
 // returns the rotational speed of the rake in RPM
 float DataProcessing::calculateRakeRotationalSpeed(int rakeRotationSpeedData, int divisionOfCircle, float radiusOfRake) {
-    // Serial.println("Calculating RPM");
-    // Serial.println(_dt_RakeRotationalSpeed);
-    // Serial.println(_rakeRotationalSpeedSwitch);
+    unsigned long int current_time = millis();
+    unsigned long int elapsed_time = current_time - _tprev_RakeRotationalSpeed;
+
     // If the _dt has not been set, set it to the current time
     if (_tprev_RakeRotationalSpeed <= 0) {
-        _tprev_RakeRotationalSpeed = millis();
+        _tprev_RakeRotationalSpeed = current_time;
         return _rakeRotationalSpeed;
     }
     // Rake has rotated once, calculate the rotational speed
     if (rakeRotationSpeedData == 0 && !_rakeRotationalSpeedSwitch) {
         // calculate Miliseconds per rotation
-        unsigned long int current_time = millis();
-        _dt_RakeRotationalSpeed = current_time - _tprev_RakeRotationalSpeed;
+        _dt_RakeRotationalSpeed = elapsed_time;
         _tprev_RakeRotationalSpeed = current_time;
         // convert to minutes 
         float minutes = float(_dt_RakeRotationalSpeed) / 60000.0;
@@ -62,6 +61,8 @@ float DataProcessing::calculateRakeRotationalSpeed(int rakeRotationSpeedData, in
     }
     else if (rakeRotationSpeedData == 1 && _rakeRotationalSpeedSwitch) {
         _rakeRotationalSpeedSwitch = false;
+    } else if (_rakeSpeedTimeOut < (elapsed_time) / 1000.0){
+        _rakeRotationalSpeed = 0;
     }
     return _rakeRotationalSpeed;
 }
@@ -73,6 +74,9 @@ float DataProcessing::calculateRakeRotationalSpeed(int rakeRotationSpeedData, in
 // radiusOfHavesterWheel: The radius of the harvester wheel in meters
 // returns the linear speed of the harvester in m/s
 float DataProcessing::calculateHavesterLinearSpeed(int harvesterLinearSpeedData, int divisionOfCircle, float radiusOfHavesterWheel) {
+    unsigned long int current_time = millis();
+    unsigned long int elapsed_time = current_time - _tprev_HarvesterLinearSpeed;
+
     // If the _dt has not been set, set it to the current time
     if (_tprev_HarvesterLinearSpeed <= 0) {
         _tprev_HarvesterLinearSpeed = millis();
@@ -82,17 +86,20 @@ float DataProcessing::calculateHavesterLinearSpeed(int harvesterLinearSpeedData,
     if (harvesterLinearSpeedData == 0 && !_harvesterLinearSpeedSwitch) {
         // calculate Miliseconds per rotation
         unsigned long int current_time = millis();
-        _dt_HarvesterLinearSpeed = current_time - _tprev_HarvesterLinearSpeed;
+        _dt_HarvesterLinearSpeed = elapsed_time;
         _tprev_HarvesterLinearSpeed = current_time;
         // convert to minutes 
         Serial.println(_dt_HarvesterLinearSpeed);
-        float seconds = float(_dt_HarvesterLinearSpeed) / 1000.0;
+        float seconds = float(_dt_HarvesterLinearSpeed) / 1000.0f;
         _harvesterLinearSpeedSwitch = true;
         // calculate Speed of harvester
         _harvesterLinearSpeed = ((2*radiusOfHavesterWheel*M_PI)/divisionOfCircle) / seconds;
     }
     else if (harvesterLinearSpeedData == 1 && _harvesterLinearSpeedSwitch) {
         _harvesterLinearSpeedSwitch = false;
+    }
+    else if (_harvesterSpeedTimeOut < (elapsed_time) / 1000.0){
+        _harvesterLinearSpeed = 0;
     }
     return _harvesterLinearSpeed;
 }

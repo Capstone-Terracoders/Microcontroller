@@ -1,5 +1,9 @@
 #include "./DataProcessing/DataProcessing.h"
 DataProcessing::DataProcessing() {}
+DataProcessing::DataProcessing(float rakeSpeedTimeOut, float harvesterSpeedTimeOut) {
+    _rakeSpeedTimeOut = rakeSpeedTimeOut;
+    _harvesterSpeedTimeOut = harvesterSpeedTimeOut;
+}
 
 DataProcessing::~DataProcessing() {}
 // Rake height
@@ -35,7 +39,7 @@ float DataProcessing::calculateBushHeight(int bushHeightData, float calibrationF
 // divisionOfCircle: The number of divisions in the circle
 // radiusOfRake: The radius of the rake meters
 // returns the rotational speed of the rake in RPM
-float DataProcessing::calculateRakeRotationalSpeed(int rakeRotationSpeedData, int divisionOfCircle, int radiusOfRake) {
+float DataProcessing::calculateRakeRotationalSpeed(int rakeRotationSpeedData, int divisionOfCircle, float radiusOfRake) {
     // Serial.println("Calculating RPM");
     // Serial.println(_dt_RakeRotationalSpeed);
     // Serial.println(_rakeRotationalSpeedSwitch);
@@ -68,7 +72,7 @@ float DataProcessing::calculateRakeRotationalSpeed(int rakeRotationSpeedData, in
 // divisionOfCircle: The number of divisions in the circle
 // radiusOfHavesterWheel: The radius of the harvester wheel in meters
 // returns the linear speed of the harvester in m/s
-float DataProcessing::calculateHavesterLinearSpeed(int harvesterLinearSpeedData, int divisionOfCircle, int radiusOfHavesterWheel) {
+float DataProcessing::calculateHavesterLinearSpeed(int harvesterLinearSpeedData, int divisionOfCircle, float radiusOfHavesterWheel) {
     // If the _dt has not been set, set it to the current time
     if (_tprev_HarvesterLinearSpeed <= 0) {
         _tprev_HarvesterLinearSpeed = millis();
@@ -81,6 +85,7 @@ float DataProcessing::calculateHavesterLinearSpeed(int harvesterLinearSpeedData,
         _dt_HarvesterLinearSpeed = current_time - _tprev_HarvesterLinearSpeed;
         _tprev_HarvesterLinearSpeed = current_time;
         // convert to minutes 
+        Serial.println(_dt_HarvesterLinearSpeed);
         float seconds = float(_dt_HarvesterLinearSpeed) / 1000.0;
         _harvesterLinearSpeedSwitch = true;
         // calculate Speed of harvester

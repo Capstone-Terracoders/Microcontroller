@@ -10,6 +10,7 @@
             "includePath": [
                 "c:/Users/heyto/Documents/GitHub/Microcontroller/include",
                 "c:/Users/heyto/Documents/GitHub/Microcontroller/src",
+                "c:/Users/heyto/Documents/GitHub/Microcontroller/.pio/libdeps/giga/ArduinoBLE/src",
                 "C:/Users/heyto/.platformio/packages/framework-arduino-mbed/cores/arduino",
                 "C:/Users/heyto/.platformio/packages/framework-arduino-mbed/cores/arduino/api/deprecated",
                 "C:/Users/heyto/.platformio/packages/framework-arduino-mbed/cores/arduino/api/deprecated-avr-comp",
@@ -69,6 +70,7 @@
                 "path": [
                     "c:/Users/heyto/Documents/GitHub/Microcontroller/include",
                     "c:/Users/heyto/Documents/GitHub/Microcontroller/src",
+                    "c:/Users/heyto/Documents/GitHub/Microcontroller/.pio/libdeps/giga/ArduinoBLE/src",
                     "C:/Users/heyto/.platformio/packages/framework-arduino-mbed/cores/arduino",
                     "C:/Users/heyto/.platformio/packages/framework-arduino-mbed/cores/arduino/api/deprecated",
                     "C:/Users/heyto/.platformio/packages/framework-arduino-mbed/cores/arduino/api/deprecated-avr-comp",

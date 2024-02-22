@@ -1,5 +1,6 @@
 #include "Arduino.h"
 #include "WildBlueberrySensorSystem.h"
+#include "ArduinoBLE.h"
 // Define sensors pin locations
 #define RAKESPEED_PIN 8
 #define HARVESTERSPEED_PIN 9
@@ -20,6 +21,10 @@ ReadSensorData readSensorData;
 
 // Data Processing
 DataProcessing dataProcessing;
+
+// Bluetooth Communication
+BLEService sensorDataService("19B10000-E8F2-537E-4F6C-D104768A1214");
+BLECharacteristic sensorDataCharacteristic("19B10001-E8F2-537E-4F6C-D104768A1214", BLERead | BLENotify, 255);
 
 // Elapsed time 
 unsigned long int dt = 0;
@@ -48,50 +53,89 @@ void sensorSetup()
   sensors.insert(std::make_pair(rakeHeightSensor.getName(), std::make_unique<Potentiometer_Analog>(rakeHeightSensor)));
 }
 
+// #define DEBUG
+void terminalPrint(float rakeRPM, float harvesterLinearSpeed, float rakeHeight, float blueberryBushHeight){
+  if (millis() - dt > 1000)
+  {
+    dt = millis();
+    // This is debug code to test the functionality of sensors 
+    #ifdef DEBUG
+    Serial.println("Rake Speed | Harvester Speed | Pot    | Ultrasonic Sensor");
+    Serial.print(readSensorData.getRakeRotationSpeedData(), 2); // Prints the raw data from the rotational speed of the rake
+    Serial.print("       |");
+    Serial.print(readSensorData.getHarvesterLinearSpeedData(), 2); // Prints the raw data from the linear speed of the harvester
+    Serial.print("       |");
+    Serial.print(readSensorData.getRakeHeightData(), 2); // Prints the raw data from the rake height sensor
+    Serial.print("    |");
+    Serial.println(readSensorData.getBushHeightData(), 2); // Prints the raw data from the blueberry bush height sensor
+    
+    #endif
+    Serial.println("Rake RPM | Harvester Speed | Rake Height | Blueberry bush height");
+    Serial.print(rakeRPM); // Prints the calculated rotational speed of the rake
+    Serial.print("       |");
+    Serial.print(harvesterLinearSpeed); // Prints the calculated linear speed of the harvester
+    Serial.print("        |");
+    Serial.print(rakeHeight); // Prints the calculated height of the rake
+    Serial.print("        |");
+    Serial.println(blueberryBushHeight); // Prints the calculated height of the rake
+  }                      
+}
+
+// void bleSetup(){
+//   BLE.setDeviceName("WBSS");
+//   BLE.setLocalName("WBSS");
+//   if(!BLE.begin()){
+//     Serial.println("Starting bluetooth failed");
+//     while(1);
+//   }
+//   BLE.setAdvertisedService(sensorDataService);
+//   sensorDataService.addCharacteristic(sensorDataRequestService);
+//   BLE.addService(sensorDataService);
+
+//   sensorDataRequestService.writeValue("Name: Potentiometer; ID: 0001; Raw: 1023; Data: 0.01321");
+//   BLE.advertise();
+// }
 void setup()
 {
   // Setup Serial Monitor for debugging
   Serial.begin(9600);
   Serial.println("-----------------------------Starting Wild Blueberry Sensor System-----------------------------");
+  // Initialize BLE
+  if (!BLE.begin()) {
+      Serial.println("Starting Bluetooth failed!");
+      while (1);
+  }
+
+  BLE.setLocalName("WildBlueberrySensorSystem");
+  BLE.setAdvertisedService(sensorDataService);
+  sensorDataService.addCharacteristic(sensorDataCharacteristic);
+  BLE.addService(sensorDataService);
+
+  // Start advertising
+  BLE.advertise();
   // Sets up sensors defined globably
   sensorSetup();
   // Instantiate readSensorData using the sensors map
   readSensorData = ReadSensorData(&sensors);
   dataProcessing = DataProcessing();
 }
-// #define DEBUG
+
+
 void loop()
 {
-  
+  // Check for connection 
+  // bluetooth.loop
+
   // Data processing
   float rakeRPM = dataProcessing.calculateRakeRotationalSpeed(readSensorData.getRakeRotationSpeedData(), 1, 0.1);  // Calculate the rotational speed of the rake
   float rakeHeight = dataProcessing.calculateRakeHeight(readSensorData.getRakeHeightData(), 0.3, 1000, 0); // Calculate the height of the rake
   float blueberryBushHeight = dataProcessing.calculateBushHeight(readSensorData.getBushHeightData(), 1); // Calculate the height of the rake
   float harvesterLinearSpeed = dataProcessing.calculateHavesterLinearSpeed(readSensorData.getHarvesterLinearSpeedData(), 1, 0.2); // Calculate the linear speed of the harvester
   // Debugging
-  if (millis() - dt > 1000)
-  {
-    dt = millis();
-  // This is debug code to test the functionality of sensors 
-  #ifdef DEBUG
-  Serial.println("Rake Speed | Harvester Speed | Pot    | Ultrasonic Sensor");
-  Serial.print(readSensorData.getRakeRotationSpeedData(), 2); // Prints the raw data from the rotational speed of the rake
-  Serial.print("       |");
-  Serial.print(readSensorData.getHarvesterLinearSpeedData(), 2); // Prints the raw data from the linear speed of the harvester
-  Serial.print("       |");
-  Serial.print(readSensorData.getRakeHeightData(), 2); // Prints the raw data from the rake height sensor
-  Serial.print("    |");
-  Serial.println(readSensorData.getBushHeightData(), 2); // Prints the raw data from the blueberry bush height sensor
-  
-  #endif
-  Serial.println("Rake RPM | Harvester Speed | Rake Height | Blueberry bush height");
-  Serial.print(rakeRPM); // Prints the calculated rotational speed of the rake
-  Serial.print("       |");
-  Serial.print(harvesterLinearSpeed); // Prints the calculated linear speed of the harvester
-  Serial.print("        |");
-  Serial.print(rakeHeight); // Prints the calculated height of the rake
-  Serial.print("        |");
-  Serial.println(blueberryBushHeight); // Prints the calculated height of the rake
-  
-  }                                           
+  terminalPrint(rakeRPM, rakeHeight, blueberryBushHeight, harvesterLinearSpeed);
+  // Update BLE characteristic with sensor data
+  String sensorData = "RPM: "+String(rakeRPM) + "," + "Rake Height: " + String(rakeHeight) + "," + "Bush Height: " +String(blueberryBushHeight) + "," + "Speed: " +String(harvesterLinearSpeed);
+  BLE.poll();
+  sensorDataCharacteristic.writeValue(sensorData.c_str());
+
 }

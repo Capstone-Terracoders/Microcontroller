@@ -24,7 +24,7 @@ DataProcessing dataProcessing;
 
 // Bluetooth Communication
 BluetoothCommunication bleCommunication;
-const char* deviceName = "WildBlueberrySensorSystem";
+const char*  deviceName = "WildBlueberrySensorSystem";
 const char*  serviceUUID = "19B10000-E8F2-537E-4F6C-D104768A1214";
 const char*  sensorDataCharacteristicUUID = "19B10001-E8F2-537E-4F6C-D104768A1214";
 const char*  sensorRawDataCharacteristicUUID = "19B10001-E8F2-537E-4F6C-R104768A1214";
@@ -120,16 +120,16 @@ void loop()
   // Debugging
   terminalPrint(rakeRPM, rakeHeight, blueberryBushHeight, harvesterLinearSpeed);
   // Update BLE characteristic with sensor data
-  String sensorData = "RPM: "+String(rakeRPM) + "," 
-  + "Rake Height: " + String(rakeHeight) + "," 
-  + "Bush Height: " +String(blueberryBushHeight) + "," 
-  + "Speed: " +String(harvesterLinearSpeed);
+  String sensorData = "{\"RPM\": "+String(rakeRPM) + "," 
+  + "\"Rake Height\": " + String(rakeHeight) + "," 
+  + "\"Bush Height\": " +String(blueberryBushHeight) + "," 
+  + "\"Speed\": " +String(harvesterLinearSpeed) + "}";
   
   // Update BLE Characteristics 
-  String rawSensorData = "Raw RPM:" + String(readSensorData.getRakeRotationSpeedData()) + "," 
-  + "Raw Rake Height:" + String(readSensorData.getRakeHeightData()) + "," 
-  + "Raw Bush Height:" + String(readSensorData.getBushHeightData()) + "," 
-  + "Raw Speed:" + String(readSensorData.getHarvesterLinearSpeedData()); 
+  String rawSensorData = "{\"Raw RPM\":" + String(readSensorData.getRakeRotationSpeedData()) + "," 
+  + "\"Raw Rake Height\":" + String(readSensorData.getRakeHeightData()) + "," 
+  + "\"Raw Bush Height\":" + String(readSensorData.getBushHeightData()) + "," 
+  + "\"Raw Speed\":" + String(readSensorData.getHarvesterLinearSpeedData()) + "}"; 
   
   // Bluetooth
   BLE.poll();

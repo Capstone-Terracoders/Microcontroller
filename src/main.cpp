@@ -23,9 +23,12 @@ ReadSensorData readSensorData;
 DataProcessing dataProcessing;
 
 // Bluetooth Communication
-BLEService sensorDataService("19B10000-E8F2-537E-4F6C-D104768A1214");
-BLECharacteristic sensorDataCharacteristic("19B10001-E8F2-537E-4F6C-D104768A1214", BLERead | BLENotify, 255);
-
+BluetoothCommunication bleCommunication;
+const char* deviceName = "WildBlueberrySensorSystem";
+const char*  serviceUUID = "19B10000-E8F2-537E-4F6C-D104768A1214";
+const char*  sensorDataCharacteristicUUID = "19B10001-E8F2-537E-4F6C-D104768A1214";
+const char*  sensorRawDataCharacteristicUUID = "19B10001-E8F2-537E-4F6C-R104768A1214";
+BLEService sensorDataService(serviceUUID);
 // Elapsed time 
 unsigned long int dt = 0;
 
@@ -81,38 +84,22 @@ void terminalPrint(float rakeRPM, float harvesterLinearSpeed, float rakeHeight, 
   }                      
 }
 
-// void bleSetup(){
-//   BLE.setDeviceName("WBSS");
-//   BLE.setLocalName("WBSS");
-//   if(!BLE.begin()){
-//     Serial.println("Starting bluetooth failed");
-//     while(1);
-//   }
-//   BLE.setAdvertisedService(sensorDataService);
-//   sensorDataService.addCharacteristic(sensorDataRequestService);
-//   BLE.addService(sensorDataService);
-
-//   sensorDataRequestService.writeValue("Name: Potentiometer; ID: 0001; Raw: 1023; Data: 0.01321");
-//   BLE.advertise();
-// }
 void setup()
 {
   // Setup Serial Monitor for debugging
   Serial.begin(9600);
   Serial.println("-----------------------------Starting Wild Blueberry Sensor System-----------------------------");
-  // Initialize BLE
-  if (!BLE.begin()) {
-      Serial.println("Starting Bluetooth failed!");
-      while (1);
-  }
+  
+  // Create BLE Communication
+  bleCommunication = BluetoothCommunication(deviceName, &sensorDataService);
+  // Add BLE Characteristics 
+  //Live Data
+  bleCommunication.addCharacteristicToList(sensorDataCharacteristicUUID, BLERead | BLENotify, 255);
+  //Raw Data
+  bleCommunication.addCharacteristicToList(sensorRawDataCharacteristicUUID, BLERead | BLENotify, 255);
+  // Setup BLE service
+  bleCommunication.begin();
 
-  BLE.setLocalName("WildBlueberrySensorSystem");
-  BLE.setAdvertisedService(sensorDataService);
-  sensorDataService.addCharacteristic(sensorDataCharacteristic);
-  BLE.addService(sensorDataService);
-
-  // Start advertising
-  BLE.advertise();
   // Sets up sensors defined globably
   sensorSetup();
   // Instantiate readSensorData using the sensors map
@@ -124,7 +111,6 @@ void setup()
 void loop()
 {
   // Check for connection 
-  // bluetooth.loop
 
   // Data processing
   float rakeRPM = dataProcessing.calculateRakeRotationalSpeed(readSensorData.getRakeRotationSpeedData(), 1, 0.1);  // Calculate the rotational speed of the rake
@@ -134,8 +120,19 @@ void loop()
   // Debugging
   terminalPrint(rakeRPM, rakeHeight, blueberryBushHeight, harvesterLinearSpeed);
   // Update BLE characteristic with sensor data
-  String sensorData = "RPM: "+String(rakeRPM) + "," + "Rake Height: " + String(rakeHeight) + "," + "Bush Height: " +String(blueberryBushHeight) + "," + "Speed: " +String(harvesterLinearSpeed);
+  String sensorData = "RPM: "+String(rakeRPM) + "," 
+  + "Rake Height: " + String(rakeHeight) + "," 
+  + "Bush Height: " +String(blueberryBushHeight) + "," 
+  + "Speed: " +String(harvesterLinearSpeed);
+  
+  // Update BLE Characteristics 
+  String rawSensorData = "Raw RPM:" + String(readSensorData.getRakeRotationSpeedData()) + "," 
+  + "Raw Rake Height:" + String(readSensorData.getRakeHeightData()) + "," 
+  + "Raw Bush Height:" + String(readSensorData.getBushHeightData()) + "," 
+  + "Raw Speed:" + String(readSensorData.getHarvesterLinearSpeedData()); 
+  
+  // Bluetooth
   BLE.poll();
-  sensorDataCharacteristic.writeValue(sensorData.c_str());
-
+  bleCommunication.writeCharacteristic(sensorDataCharacteristicUUID, sensorData.c_str());
+  bleCommunication.writeCharacteristic(sensorRawDataCharacteristicUUID, rawSensorData.c_str());
 }

@@ -16,6 +16,7 @@ void begin();
 
 bool writeCharacteristic(BLECharacteristic &charateristic, const char *data);
 bool writeCharacteristic(const char *uuid, const char *data);
+String receiveCharacteristic(const char *uuid, char *buffer, int length);
 
 BLEService *service;
 std::vector<BLECharacteristic> characteristics;

@@ -71,3 +71,17 @@ bool BluetoothCommunication::writeCharacteristic(const char *uuid, const char *d
   }
   return false;
 }
+
+String BluetoothCommunication::receiveCharacteristic(const char *uuid, char *buffer, int length){
+  
+  for (auto& charateristic : characteristics) {
+    if (charateristic.uuid() == uuid){
+      if (!charateristic.readValue(buffer,length)){
+        Serial.println("Failed to read buffer");
+        break;
+      }
+      break;
+    }
+  }
+  return buffer;
+}

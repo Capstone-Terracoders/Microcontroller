@@ -25,9 +25,10 @@ DataProcessing dataProcessing;
 // Bluetooth Communication
 BluetoothCommunication bleCommunication;
 const char*  deviceName = "WildBlueberrySensorSystem";
-const char*  serviceUUID = "19B10000-E8F2-537E-4F6C-D104768A1214";
+const char*  serviceUUID = "DA00"; // Sensor Data Service
 const char*  sensorDataCharacteristicUUID = "19B10001-E8F2-537E-4F6C-D104768A1214";
 const char*  sensorRawDataCharacteristicUUID = "19B10001-E8F2-537E-4F6C-R104768A1214";
+const char*  configurationCharacteristicUUID = "19B10001-c45f-478d-bf47-257959fedb0a";
 BLEService sensorDataService(serviceUUID);
 // Elapsed time 
 unsigned long int dt = 0;
@@ -97,6 +98,9 @@ void setup()
   bleCommunication.addCharacteristicToList(sensorDataCharacteristicUUID, BLERead | BLENotify, 255);
   //Raw Data
   bleCommunication.addCharacteristicToList(sensorRawDataCharacteristicUUID, BLERead | BLENotify, 255);
+  //
+  bleCommunication.addCharacteristicToList(configurationCharacteristicUUID, BLERead | BLEWrite | BLENotify, 255);
+
   // Setup BLE service
   bleCommunication.begin();
 
@@ -130,9 +134,10 @@ void loop()
   + "\"Raw Rake Height\":" + String(readSensorData.getRakeHeightData()) + "," 
   + "\"Raw Bush Height\":" + String(readSensorData.getBushHeightData()) + "," 
   + "\"Raw Speed\":" + String(readSensorData.getHarvesterLinearSpeedData()) + "}"; 
-  
+  char buffer[255];
   // Bluetooth
   BLE.poll();
   bleCommunication.writeCharacteristic(sensorDataCharacteristicUUID, sensorData.c_str());
   bleCommunication.writeCharacteristic(sensorRawDataCharacteristicUUID, rawSensorData.c_str());
+  Serial.println(bleCommunication.receiveCharacteristic(configurationCharacteristicUUID, buffer, 255));
 }

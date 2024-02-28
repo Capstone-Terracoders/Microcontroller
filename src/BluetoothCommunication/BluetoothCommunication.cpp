@@ -16,7 +16,7 @@ BluetoothCommunication::~BluetoothCommunication(){
 }
 
 
-void BluetoothCommunication::addCharacteristicToList(BLECharacteristic &characteristic){
+void BluetoothCommunication::addCharacteristicToList(BLEStringCharacteristic &characteristic){
   characteristics.push_back(characteristic);
   if (*service) {
         service->addCharacteristic(characteristic);
@@ -28,7 +28,7 @@ void BluetoothCommunication::addCharacteristicToList(BLECharacteristic &characte
 }
 
 void BluetoothCommunication::addCharacteristicToList(const char* uuid, uint16_t permissions, int value){
-  BLECharacteristic characteristic =  BLECharacteristic(uuid, permissions, value);
+  BLEStringCharacteristic characteristic =  BLEStringCharacteristic(uuid, permissions, value);
   
   characteristics.push_back(characteristic);
   if (service) {
@@ -47,7 +47,7 @@ void BluetoothCommunication::begin(){
   
   // // set local name
   BLE.setLocalName(_deviceName);
-  Serial.println("YO setting up");
+  Serial.println("Setting up BLE...");
   BLE.setAdvertisedService(*service);
   Serial.println(service->uuid());
   if(characteristics.size() <1){
@@ -58,30 +58,35 @@ void BluetoothCommunication::begin(){
 
   // // Start advertising
   BLE.advertise();
+  Serial.println("BLE device advertising...");
+
 }
 
-bool BluetoothCommunication::writeCharacteristic(BLECharacteristic &charateristic, const char *data){
-  return (charateristic.writeValue(data) ? true : false);
+bool BluetoothCommunication::writeCharacteristic(BLEStringCharacteristic &characteristic, const char *data){
+  return (characteristic.writeValue(data) ? true : false);
 }
 bool BluetoothCommunication::writeCharacteristic(const char *uuid, const char *data){
-  for (auto& charateristic : characteristics) {
-    if (charateristic.uuid() == uuid){
-      return (charateristic.writeValue(data) ? true : false);
+  for (auto& characteristic : characteristics) {
+    if (characteristic.uuid() == uuid){
+      return (characteristic.writeValue(data) ? true : false);
     }
   }
   return false;
 }
 
-String BluetoothCommunication::receiveCharacteristic(const char *uuid, char *buffer, int length){
+String BluetoothCommunication::receivedDataCharacteristic(const char *uuid, char *buffer, int length){
   
-  for (auto& charateristic : characteristics) {
-    if (charateristic.uuid() == uuid){
-      if (!charateristic.readValue(buffer,length)){
-        Serial.println("Failed to read buffer");
-        break;
+  for (auto& characteristic : characteristics) {
+    if (characteristic.uuid() == uuid){
+      if (characteristic.written()) {
+        // Read the data
+        characteristic.readValue(buffer,length);
+        Serial.print("Received value: ");
+        Serial.println(buffer);
+        return buffer;
       }
       break;
     }
   }
-  return buffer;
+  return "";
 }

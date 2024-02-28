@@ -30,6 +30,7 @@ const char*  sensorDataCharacteristicUUID = "19B10001-E8F2-537E-4F6C-D104768A121
 const char*  sensorRawDataCharacteristicUUID = "19B10001-E8F2-537E-4F6C-R104768A1214";
 const char*  configurationCharacteristicUUID = "19B10001-c45f-478d-bf47-257959fedb0a";
 BLEService sensorDataService(serviceUUID);
+BLEDevice central;
 // Elapsed time 
 unsigned long int dt = 0;
 
@@ -59,7 +60,7 @@ void sensorSetup()
 
 // #define DEBUG
 void terminalPrint(float rakeRPM, float harvesterLinearSpeed, float rakeHeight, float blueberryBushHeight){
-  if (millis() - dt > 1000)
+  if (millis() - dt > 100)
   {
     dt = millis();
     // This is debug code to test the functionality of sensors 
@@ -114,30 +115,51 @@ void setup()
 
 void loop()
 {
-  // Check for connection 
-
-  // Data processing
-  float rakeRPM = dataProcessing.calculateRakeRotationalSpeed(readSensorData.getRakeRotationSpeedData(), 1, 0.1);  // Calculate the rotational speed of the rake
-  float rakeHeight = dataProcessing.calculateRakeHeight(readSensorData.getRakeHeightData(), 0.3, 1000, 0); // Calculate the height of the rake
-  float blueberryBushHeight = dataProcessing.calculateBushHeight(readSensorData.getBushHeightData(), 1); // Calculate the height of the rake
-  float harvesterLinearSpeed = dataProcessing.calculateHavesterLinearSpeed(readSensorData.getHarvesterLinearSpeedData(), 1, 0.2); // Calculate the linear speed of the harvester
-  // Debugging
-  terminalPrint(rakeRPM, rakeHeight, blueberryBushHeight, harvesterLinearSpeed);
-  // Update BLE characteristic with sensor data
-  String sensorData = "{\"RPM\": "+String(rakeRPM) + "," 
-  + "\"Rake Height\": " + String(rakeHeight) + "," 
-  + "\"Bush Height\": " +String(blueberryBushHeight) + "," 
-  + "\"Speed\": " +String(harvesterLinearSpeed) + "}";
-  
-  // Update BLE Characteristics 
-  String rawSensorData = "{\"Raw RPM\":" + String(readSensorData.getRakeRotationSpeedData()) + "," 
-  + "\"Raw Rake Height\":" + String(readSensorData.getRakeHeightData()) + "," 
-  + "\"Raw Bush Height\":" + String(readSensorData.getBushHeightData()) + "," 
-  + "\"Raw Speed\":" + String(readSensorData.getHarvesterLinearSpeedData()) + "}"; 
+ 
   char buffer[255];
   // Bluetooth
   BLE.poll();
-  bleCommunication.writeCharacteristic(sensorDataCharacteristicUUID, sensorData.c_str());
-  bleCommunication.writeCharacteristic(sensorRawDataCharacteristicUUID, rawSensorData.c_str());
-  Serial.println(bleCommunication.receiveCharacteristic(configurationCharacteristicUUID, buffer, 255));
+  // Check for connection 
+  central = BLE.central();
+  if (central) {
+    Serial.print("Connected to central: ");
+    Serial.println(central.address());
+
+    while (central.connected()) {
+       // Data processing
+      float rakeRPM = dataProcessing.calculateRakeRotationalSpeed(readSensorData.getRakeRotationSpeedData(), 1, 0.1);  // Calculate the rotational speed of the rake
+      float rakeHeight = dataProcessing.calculateRakeHeight(readSensorData.getRakeHeightData(), 0.3, 1000, 0); // Calculate the height of the rake
+      float blueberryBushHeight = dataProcessing.calculateBushHeight(readSensorData.getBushHeightData(), 1); // Calculate the height of the rake
+      float harvesterLinearSpeed = dataProcessing.calculateHavesterLinearSpeed(readSensorData.getHarvesterLinearSpeedData(), 1, 0.2); // Calculate the linear speed of the harvester
+      // Debugging
+      terminalPrint(rakeRPM, rakeHeight, blueberryBushHeight, harvesterLinearSpeed);
+      // Update BLE characteristic with sensor data
+      String sensorData = "{\"RPM\": "+String(rakeRPM) + "," 
+      + "\"Rake Height\": " + String(rakeHeight) + "," 
+      + "\"Bush Height\": " +String(blueberryBushHeight) + "," 
+      + "\"Speed\": " +String(harvesterLinearSpeed) + "}";
+      
+      // Update BLE Characteristics 
+      String rawSensorData = "{\"Raw RPM\":" + String(readSensorData.getRakeRotationSpeedData()) + "," 
+      + "\"Raw Rake Height\":" + String(readSensorData.getRakeHeightData()) + "," 
+      + "\"Raw Bush Height\":" + String(readSensorData.getBushHeightData()) + "," 
+      + "\"Raw Speed\":" + String(readSensorData.getHarvesterLinearSpeedData()) + "}"; 
+      // Check if data is available to read
+      bleCommunication.writeCharacteristic(sensorDataCharacteristicUUID, sensorData.c_str());
+      bleCommunication.writeCharacteristic(sensorRawDataCharacteristicUUID, rawSensorData.c_str());
+      bleCommunication.receivedDataCharacteristic(configurationCharacteristicUUID, buffer, 255);
+    }
+
+    // When the central disconnects, print a message
+    Serial.print("Disconnected from central: ");
+    Serial.println(central.address());
+  } else {
+     // Data processing
+      float rakeRPM = dataProcessing.calculateRakeRotationalSpeed(readSensorData.getRakeRotationSpeedData(), 1, 0.1);  // Calculate the rotational speed of the rake
+      float rakeHeight = dataProcessing.calculateRakeHeight(readSensorData.getRakeHeightData(), 0.3, 1000, 0); // Calculate the height of the rake
+      float blueberryBushHeight = dataProcessing.calculateBushHeight(readSensorData.getBushHeightData(), 1); // Calculate the height of the rake
+      float harvesterLinearSpeed = dataProcessing.calculateHavesterLinearSpeed(readSensorData.getHarvesterLinearSpeedData(), 1, 0.2); // Calculate the linear speed of the harvester
+      // Debugging
+      terminalPrint(rakeRPM, rakeHeight, blueberryBushHeight, harvesterLinearSpeed);
+  }
 }

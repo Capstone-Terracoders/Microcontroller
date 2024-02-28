@@ -10,16 +10,17 @@ BluetoothCommunication();
 BluetoothCommunication(const char *deviceName, BLEService *serviceUUID);
 ~BluetoothCommunication();
 
-void addCharacteristicToList(BLECharacteristic &characteristic);
+void addCharacteristicToList(BLEStringCharacteristic &characteristic);
 void addCharacteristicToList(const char* uuid, uint16_t permissions, int value);
 void begin();
 
-bool writeCharacteristic(BLECharacteristic &charateristic, const char *data);
+bool writeCharacteristic(BLEStringCharacteristic &characteristic, const char *data);
 bool writeCharacteristic(const char *uuid, const char *data);
-String receiveCharacteristic(const char *uuid, char *buffer, int length);
+String receivedDataCharacteristic(const char *uuid, char *buffer, int length);
 
 BLEService *service;
-std::vector<BLECharacteristic> characteristics;
+BLEDevice *central;
+std::vector<BLEStringCharacteristic> characteristics;
 private: 
 const char *_deviceName = "Arduino";
 };

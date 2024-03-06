@@ -12,7 +12,7 @@ public:
     ~DataInterpretation();
 
     // Accessors
-    float optimalRakeHeight(float rakeHeightData, float bushHeightData, float rakeRotationalSpeed, float harvesterSpeed);
+    float optimalRakeHeight(float heightOfPlant, float lenghtOfRakeTeeth, float angleOfInclinationOfRake, float radiusOfReel, float angularSpeedOfReel);
     float optimalRakeRotationSpeed(float rakeHeightData, float bushHeightData, float rakeRotationalSpeed, float harvesterSpeed);
     float setOptimalRakeHeightCoefficient(float rakeHeightCoefficient);
     float setOptimalRakeRotationalSpeedCoefficient(float rakeRotationalSpeedCoefficient);

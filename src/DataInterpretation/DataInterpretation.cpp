@@ -8,11 +8,11 @@ DataInterpretation::~DataInterpretation()
 {
 }
 
-float DataInterpretation::optimalRakeHeight(float rakeHeightData, float bushHeightData, float rakeRotationalSpeed, float harvesterSpeed)
+float DataInterpretation::optimalRakeHeight(float heightOfPlant, float lenghtOfRakeTeeth, float angleOfInclinationOfRake, float radiusOfReel, float angularSpeedOfReel)
 {
     // Calculate the optimal rake height
     // Placeholder equation until the actual equation is known
-    float optimalRakeHeight = (rakeHeightData - bushHeightData) * (rakeRotationalSpeed / harvesterSpeed); 
+    float optimalRakeHeight = heightOfPlant + lenghtOfRakeTeeth * cos(angleOfInclinationOfRake) + radiusOfReel*sin(angularSpeedOfReel);
     return optimalRakeHeight;
 }
 

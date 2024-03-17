@@ -1,25 +1,25 @@
-#ifndef DATAINTERPRETATION_H
-#define DATAINTERPRETATION_H
+#ifndef INCLUDE_DATAINTERPRETATION_DATAINTERPRETATION_H_
+#define INCLUDE_DATAINTERPRETATION_DATAINTERPRETATION_H_
 #include <math.h>
 #include <Arduino.h>
 
-class DataInterpretation
-{
-public:
+class DataInterpretation{
+ public:
     // Constructors
     DataInterpretation();
     // Destructor
     ~DataInterpretation();
-
     // Accessors
-    float optimalRakeHeight(float heightOfPlant, float lenghtOfRakeTeeth, float angleOfInclinationOfRake, float radiusOfReel, float angularSpeedOfReel);
-    float optimalRakeRotationSpeed(float rakeHeightData, float bushHeightData, float rakeRotationalSpeed, float harvesterSpeed);
+    float optimalRakeHeight(float heightOfPlant, float lenghtOfRakeTeeth,
+    float angleOfInclinationOfRake, float radiusOfReel, float angularSpeedOfReel);
+    float optimalRakeRotationSpeed(float rakeHeightData, float bushHeightData,
+    float rakeRotationalSpeed, float harvesterSpeed);
     float setOptimalRakeHeightCoefficient(float rakeHeightCoefficient);
     float setOptimalRakeRotationalSpeedCoefficient(float rakeRotationalSpeedCoefficient);
     float getOptimalRakeHeightCoefficient();
     float getOptimalRakeRotationalSpeedCoefficient();
-private: 
+ private:
     float _rakeHeightCoefficient = 1.0f;
     float _rakeRotationalSpeedCoefficient = 1.0f;
 };
-#endif
+#endif  // INCLUDE_DATAINTERPRETATION_DATAINTERPRETATION_H_

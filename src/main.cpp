@@ -22,6 +22,9 @@ ReadSensorData readSensorData;
 // Data Processing
 DataProcessing dataProcessing;
 
+// Data Interpretation
+DataInterpretation dataInterpretation;
+
 // Bluetooth Communication
 BluetoothCommunication bleCommunication;
 const char*  deviceName = "WildBlueberrySensorSystem";
@@ -29,6 +32,7 @@ const char*  serviceUUID = "DA00"; // Sensor Data Service
 const char*  sensorDataCharacteristicUUID = "19B10001-E8F2-537E-4F6C-D104768A1214";
 const char*  sensorRawDataCharacteristicUUID = "19B10001-E8F2-537E-4F6C-R104768A1214";
 const char*  configurationCharacteristicUUID = "19B10001-c45f-478d-bf47-257959fedb0a";
+const char*  optimalOperationCharacteristicUUID = "19B10001-O45f-478d-bf47-O104768A1214";
 BLEService sensorDataService(serviceUUID);
 BLEDevice central;
 // Elapsed time 
@@ -99,6 +103,8 @@ void setup()
   bleCommunication.addCharacteristicToList(sensorDataCharacteristicUUID, BLERead | BLENotify, 255);
   //Raw Data
   bleCommunication.addCharacteristicToList(sensorRawDataCharacteristicUUID, BLERead | BLENotify, 255);
+  // Optimal Operation data
+  bleCommunication.addCharacteristicToList(optimalOperationCharacteristicUUID, BLERead | BLENotify, 255);
   //
   bleCommunication.addCharacteristicToList(configurationCharacteristicUUID, BLERead | BLEWrite | BLENotify, 255);
 
@@ -110,6 +116,7 @@ void setup()
   // Instantiate readSensorData using the sensors map
   readSensorData = ReadSensorData(&sensors);
   dataProcessing = DataProcessing();
+  dataInterpretation = DataInterpretation();
 }
 
 
@@ -144,9 +151,19 @@ void loop()
       + "\"Raw Rake Height\":" + String(readSensorData.getRakeHeightData()) + "," 
       + "\"Raw Bush Height\":" + String(readSensorData.getBushHeightData()) + "," 
       + "\"Raw Speed\":" + String(readSensorData.getHarvesterLinearSpeedData()) + "}"; 
+
+
+      // Update the optimal Opeartion BLE Charateritic
+      float optimalRakeHeight = dataInterpretation.optimalRakeHeight(blueberryBushHeight, 0.4, 0.1, 0.125, rakeRPM);
+      float optimalRakeRotationSpeed = dataInterpretation.optimalRakeRotationSpeed(rakeHeight, blueberryBushHeight, rakeRPM, harvesterLinearSpeed);
+
+      String optimalOperationData = "{\"OptRakeHeight\": "+String(optimalRakeHeight) + "," 
+      + "\"OptRakeRPM\": " + String(optimalRakeRotationSpeed) + "}";
+
       // Check if data is available to read
       bleCommunication.writeCharacteristic(sensorDataCharacteristicUUID, sensorData.c_str());
       bleCommunication.writeCharacteristic(sensorRawDataCharacteristicUUID, rawSensorData.c_str());
+      bleCommunication.writeCharacteristic(optimalOperationCharacteristicUUID, optimalOperationData.c_str());
       bleCommunication.receivedDataCharacteristic(configurationCharacteristicUUID, buffer, 255);
     }
 

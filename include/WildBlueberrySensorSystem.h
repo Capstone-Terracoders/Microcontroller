@@ -17,5 +17,6 @@
 #include "./BluetoothCommunication/BluetoothCommunication.h"
 
 #include "./ReadSensorData/ReadSensorData.h"
+#include "./DataInterpretation/DataInterpretation.h"
 
 #endif

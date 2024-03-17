@@ -1,23 +1,18 @@
 #include "./ReadSensorData/ReadSensorData.h"
 // constructor
-ReadSensorData::ReadSensorData()
-{
+ReadSensorData::ReadSensorData() {
 }
 // constructor
 ReadSensorData::ReadSensorData(std::map<std::string, std::unique_ptr<Sensor>> *sensors)
-    : _sensors(sensors)
-{
+    : _sensors(sensors) {
 }
 // destructor
-ReadSensorData::~ReadSensorData()
-{
+ReadSensorData::~ReadSensorData() {
 }
 // getHarvesterLinearSpeedData() returns the data from the harvester_linear_speed sensor
-float ReadSensorData::getHarvesterLinearSpeedData()
-{
-    auto it = _sensors->find("harvester_linear_speed"); // find the sensor with the name "harvester_linear_speed"
-    if (it != _sensors->end())                          // if the sensor is found
-    {
+float ReadSensorData::getHarvesterLinearSpeedData() {
+    auto it = _sensors->find("harvester_linear_speed");  // find the sensor with the name "harvester_linear_speed"
+    if (it != _sensors->end()) {                          // if the sensor is found
         // return the data from the sensor
         return it->second->readData();
     }
@@ -26,11 +21,9 @@ float ReadSensorData::getHarvesterLinearSpeedData()
 }
 
 // getRakeRotationSpeedData() returns the data from the rake_rotation_speed sensor
-float ReadSensorData::getRakeRotationSpeedData()
-{
-    auto it = _sensors->find("rake_rotation_speed"); // find the sensor with the name "rake_rotation_speed"
-    if (it != _sensors->end())                       // if the sensor is found
-    {
+float ReadSensorData::getRakeRotationSpeedData() {
+    auto it = _sensors->find("rake_rotation_speed");  // find the sensor with the name "rake_rotation_speed"
+    if (it != _sensors->end()) {                      // if the sensor is found
         // return the data from the sensor
         return it->second->readData();
     }
@@ -39,11 +32,9 @@ float ReadSensorData::getRakeRotationSpeedData()
 }
 
 // getRakeHeightData() returns the data from the rake_height sensor
-float ReadSensorData::getRakeHeightData()
-{
-    auto it = _sensors->find("rake_height"); // find the sensor with the name "rake_height"
-    if (it != _sensors->end())               // if the sensor is found
-    {
+float ReadSensorData::getRakeHeightData() {
+    auto it = _sensors->find("rake_height");  // find the sensor with the name "rake_height"
+    if (it != _sensors->end()) {             // if the sensor is found
         // return the data from the sensor
         return it->second->readData();
     }
@@ -52,11 +43,9 @@ float ReadSensorData::getRakeHeightData()
 }
 
 // getBushHeightData() returns the data from the bush_height sensor
-float ReadSensorData::getBushHeightData()
-{
-    auto it = _sensors->find("bush_height"); // find the sensor with the name "bush_height"
-    if (it != _sensors->end())               // if the sensor is found
-    {
+float ReadSensorData::getBushHeightData() {
+    auto it = _sensors->find("bush_height");  // find the sensor with the name "bush_height"
+    if (it != _sensors->end()) {              // if the sensor is found
         // return the data from the sensor
         return it->second->readData();
     }

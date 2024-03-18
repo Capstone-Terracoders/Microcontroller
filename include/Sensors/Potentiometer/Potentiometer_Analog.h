@@ -6,18 +6,16 @@
 //  1 - ground
 //  2 - Ao aka output
 //  3 - Vcc (5V)
-#ifndef POTENTIOMETER_ANALOG_H
-#define POTENTIOMETER_ANALOG_H
+#ifndef INCLUDE_SENSORS_POTENTIOMETER_POTENTIOMETER_ANALOG_H_
+#define INCLUDE_SENSORS_POTENTIOMETER_POTENTIOMETER_ANALOG_H_
 #include "Potentiometer.h"
 
-class Potentiometer_Analog : public Potentiometer
-{
-public:
+class Potentiometer_Analog : public Potentiometer {
+ public:
     // constructor
-    Potentiometer_Analog(int data_pin);
+    explicit Potentiometer_Analog(int data_pin);
     // sets the signal type to analog
-    SignalType getSignalType() const override
-    {
+    SignalType getSignalType() const override {
         return SignalType::ANALOG;
     }
     // destructor
@@ -26,8 +24,8 @@ public:
     void setPin(int pin);
     // Accessors
     int getPin();
-    float readData() override; // This gets the potentiometer data
-private:
+    float readData() override;  // This gets the potentiometer data
+ private:
     int _data_pin = 0;
 };
-#endif
+#endif  // INCLUDE_SENSORS_POTENTIOMETER_POTENTIOMETER_ANALOG_H_

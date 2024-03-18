@@ -19,32 +19,25 @@
 //  Gray    - AN (analog)
 //  Purple  - PW (pulse width)
 //  Blue    - BW ()
-#ifndef UltrasonicSensor_MB1010_H
-#define UtlrasonicSensor_MB1010_H
+#ifndef INCLUDE_SENSORS_ULTRASONICSENSOR_UTLRASONICSENSOR_MB1010_H_
+#define INCLUDE_SENSORS_ULTRASONICSENSOR_UTLRASONICSENSOR_MB1010_H_
 
 #include "UltrasonicSensor.h"
-class UltrasonicSensor_MB1010 : public UltrasonicSensor
-{
-public:
+class UltrasonicSensor_MB1010 : public UltrasonicSensor {
+ public:
     // constructor
-    // UltrasonicSensor_MB1010();
-    UltrasonicSensor_MB1010(const int &data_pin);
-
+    explicit UltrasonicSensor_MB1010(const int &data_pin);
     // set the signal type to digital
-    SignalType getSignalType() const override
-    {
+    SignalType getSignalType() const override {
         return SignalType::DIGITAL;
     }
-
     // destructor
     virtual ~UltrasonicSensor_MB1010();
-
-    float readData() override; // This gets the ultrasonic sensor data
+    float readData() override;  // This gets the ultrasonic sensor data
     int getDataPin();
-
     void setDataPin(const int &pin);
 
-private:
-    int _data_pin = A5; // echo pin receives the signal
+ private:
+    int _data_pin = A5;  // echo pin receives the signal
 };
-#endif
+#endif  // INCLUDE_SENSORS_ULTRASONICSENSOR_UTLRASONICSENSOR_MB1010_H_

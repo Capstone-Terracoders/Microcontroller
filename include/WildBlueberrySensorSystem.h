@@ -16,7 +16,6 @@
 #include "./DataProcessing/DataProcessing.h"
 #include "./BluetoothCommunication/BluetoothCommunication.h"
 
-#include "./ReadSensorData/ReadSensorData.h"
 #include "./DataInterpretation/DataInterpretation.h"
 
 #endif  // INCLUDE_WILDBLUEBERRYSENSORSYSTEM_H_

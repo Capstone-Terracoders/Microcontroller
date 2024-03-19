@@ -20,6 +20,11 @@ class DataProcessing {
     float calculateRakeRotationalSpeed(int rakeRotationSpeedData, int divisionOfCircle, float radiusOfRake);
     float calculateHavesterLinearSpeed(int harvesterLinearSpeedData, int divisionOfCircle,
     float radiusOfHarvesterWheel);
+    // Constants
+    static constexpr float MILISECONDS_TO_MINUTES = 60000.0;
+    static constexpr float MILISECONDS_TO_SECONDS = 1000.0;
+    static constexpr float PWM_TO_INCHES = 147.0;
+    static constexpr float INCHES_TO_METERS = 0.0254;
 
  private:
     // Variables

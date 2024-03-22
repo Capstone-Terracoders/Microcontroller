@@ -98,3 +98,19 @@ float radiusOfHavesterWheel) {
     }
     return _harvesterLinearSpeed;
 }
+// Returns rake speed Timeout
+float DataProcessing::getRakeSpeedTimeout() {
+    return _rakeSpeedTimeOut;
+}
+// Returns Harvester Speed Timeout
+float DataProcessing::getHarvesterSpeedTimeout() {
+    return _harvesterSpeedTimeOut;
+}
+// Set the rake speed Timeout
+void DataProcessing::setRakeSpeedTimeout(float rakeSpeedTimeout) {
+    _rakeSpeedTimeOut = rakeSpeedTimeout;
+}
+// Set the Harvester speed Timeout
+void DataProcessing::setHarvesterSpeedTimeout(float harvesterSpeedTimout) {
+    _harvesterSpeedTimeOut = harvesterSpeedTimout;
+}

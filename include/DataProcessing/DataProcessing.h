@@ -20,6 +20,11 @@ class DataProcessing {
     float calculateRakeRotationalSpeed(int rakeRotationSpeedData, int divisionOfCircle, float radiusOfRake);
     float calculateHavesterLinearSpeed(int harvesterLinearSpeedData, int divisionOfCircle,
     float radiusOfHarvesterWheel);
+    float getRakeSpeedTimeout();
+    float getHarvesterSpeedTimeout();
+    // Mutators
+    void setRakeSpeedTimeout(float rakeSpeedTimeout);
+    void setHarvesterSpeedTimeout(float harvesterSpeedTimout);
     // Constants
     static constexpr float MILISECONDS_TO_MINUTES = 60000.0;
     static constexpr float MILISECONDS_TO_SECONDS = 1000.0;

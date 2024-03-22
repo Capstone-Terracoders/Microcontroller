@@ -2,10 +2,6 @@
 // Class: Potentiometer_Analog class
 // Description: This class is used to read data from an analog potentiometer
 //
-// Pinout
-//  1 - ground
-//  2 - Ao aka output
-//  3 - Vcc (5V)
 #ifndef INCLUDE_SENSORS_POTENTIOMETER_POTENTIOMETER_ANALOG_H_
 #define INCLUDE_SENSORS_POTENTIOMETER_POTENTIOMETER_ANALOG_H_
 #include "Potentiometer.h"

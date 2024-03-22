@@ -49,7 +49,7 @@ BLEService sensorDataService(serviceUUID);
 BLEDevice central;
 const int CHARACTERISTIC_BUFFER_SIZE = 255;
 // Elapsed time
-uint64_t dt = 0;
+uint64_t elapsedTime = 0;
 
 /// Define the sensors being used and set them up
 void sensorSetup() {
@@ -80,8 +80,8 @@ void sensorSetup() {
 
 // #define DEBUG
 void terminalPrint(float rakeRPM, float harvesterLinearSpeed, float rakeHeight, float blueberryBushHeight, int delay) {
-  if (millis() - dt > delay) {
-    dt = millis();
+  if (millis() - elapsedTime > delay) {
+    elapsedTime = millis();
     // This is debug code to test the functionality of sensors
     #ifdef DEBUG
     Serial.println("Rake Speed | Harvester Speed | Pot    | Ultrasonic Sensor");

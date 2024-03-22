@@ -19,7 +19,6 @@ float UltrasonicSensor_HCSR04::readData() {
     digitalWrite(_trigger_pin, LOW);          // write trigger pin low
     pinMode(_echo_pin, INPUT);                // set echo pin as input
     int32_t duration = pulseIn(_echo_pin, HIGH);  // time of flight in microseconds
-    // float distance = duration * 0.0343 / 2;
     return duration;
 }
 

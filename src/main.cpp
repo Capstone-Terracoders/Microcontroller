@@ -26,6 +26,8 @@ const int MIN_VALUE_OF_RAKE_HEIGHT = 0;  // Used for clamping sensor values
 
 const float BUSH_HEIGHT_CALIBRATION_FACTOR = 1;  // calibration factor for the ultrasonic sensor
 
+const float LENGTH_OF_RAKE_TEETH = 0.4;  //
+const float ANGLE_OF_INCLINATION_OF_RAKE = 0.1;  //
 // Define sensors map that holds all sensors
 std::map<std::string, std::unique_ptr<Sensor>> sensors;
 
@@ -173,7 +175,8 @@ void loop() {
       + "\"Raw Speed\":" + String(rawHarvesterLinearSpeedSensor) + "}";
 
       // Update the optimal Opeartion BLE Charateritic
-      float optimalRakeHeight = dataInterpretation.optimalRakeHeight(blueberryBushHeight, 0.4, 0.1, 0.125, rakeRPM);
+      float optimalRakeHeight = dataInterpretation.optimalRakeHeight(blueberryBushHeight, LENGTH_OF_RAKE_TEETH,
+      ANGLE_OF_INCLINATION_OF_RAKE, RADIUS_OF_RAKE_WHEEL, rakeRPM);
       float optimalRakeRotationSpeed = dataInterpretation.optimalRakeRotationSpeed(rakeHeight, blueberryBushHeight,
       rakeRPM, harvesterLinearSpeed);
 

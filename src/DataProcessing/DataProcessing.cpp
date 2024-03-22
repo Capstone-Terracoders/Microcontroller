@@ -1,11 +1,9 @@
 #include "./DataProcessing/DataProcessing.h"
-DataProcessing::DataProcessing() {}
 DataProcessing::DataProcessing(float rakeSpeedTimeOut, float harvesterSpeedTimeOut) {
     _rakeSpeedTimeOut = rakeSpeedTimeOut;
     _harvesterSpeedTimeOut = harvesterSpeedTimeOut;
 }
 
-DataProcessing::~DataProcessing() {}
 // Rake height
 // parameters:
 // rakeHeightData: The data from the rake_height sensor

@@ -30,9 +30,7 @@ float DataProcessing::calculateRakeHeight(int rakeHeightData, float heightOfRake
 // calibrationFactor: The calibration factor for the sensor
 // returns the height of the bush in meters
 float DataProcessing::calculateBushHeight(int bushHeightData, float calibrationFactor) {
-    float conversionFactor = 147.0;  // Conversion factor of PWM to inches
-    float inchesToMeters = 0.0254;  // Conversion factor of inches to meters
-    return ((bushHeightData / conversionFactor) * inchesToMeters * calibrationFactor);
+    return ((bushHeightData / PWM_TO_INCHES) * INCHES_TO_METERS * calibrationFactor);
 }
 // Rake Rotational Speed
 // rakeRotationSpeedData: 1 if the rake has rotated once, 0 if the rake has not rotated
@@ -55,13 +53,13 @@ float radiusOfRake) {
         _dt_RakeRotationalSpeed = elapsed_time;
         _tprev_RakeRotationalSpeed = current_time;
         // convert to minutes
-        float minutes = static_cast<float>(_dt_RakeRotationalSpeed) / 60000.0;
+        float minutes = static_cast<float>(_dt_RakeRotationalSpeed) / MILISECONDS_TO_MINUTES;
         _rakeRotationalSpeedSwitch = true;
         // calculate RMP of rake
         _rakeRotationalSpeed = divisionOfCircle / (minutes);
     } else if (rakeRotationSpeedData == 1 && _rakeRotationalSpeedSwitch) {
         _rakeRotationalSpeedSwitch = false;
-    } else if (_rakeSpeedTimeOut < (elapsed_time) / 1000.0) {
+    } else if (_rakeSpeedTimeOut < (elapsed_time) / MILISECONDS_TO_SECONDS) {
         _rakeRotationalSpeed = 0;
     }
     return _rakeRotationalSpeed;
@@ -88,14 +86,14 @@ float radiusOfHavesterWheel) {
         int64_t current_time = millis();
         _dt_HarvesterLinearSpeed = elapsed_time;
         _tprev_HarvesterLinearSpeed = current_time;
-        // convert to minutes
-        float seconds = static_cast<float>(_dt_HarvesterLinearSpeed) / 1000.0f;
+        // convert to seconds
+        float seconds = static_cast<float>(_dt_HarvesterLinearSpeed) / MILISECONDS_TO_SECONDS;
         _harvesterLinearSpeedSwitch = true;
         // calculate Speed of harvester
         _harvesterLinearSpeed = ((2*radiusOfHavesterWheel*M_PI)/divisionOfCircle) / seconds;
     } else if (harvesterLinearSpeedData == 1 && _harvesterLinearSpeedSwitch) {
         _harvesterLinearSpeedSwitch = false;
-    } else if (_harvesterSpeedTimeOut < (elapsed_time) / 1000.0) {
+    } else if (_harvesterSpeedTimeOut < (elapsed_time) / MILISECONDS_TO_SECONDS) {
         _harvesterLinearSpeed = 0;
     }
     return _harvesterLinearSpeed;

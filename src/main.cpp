@@ -13,6 +13,21 @@ HallEffectSensor_NJK5002C harvesterLinearSpeedSensor = HallEffectSensor_NJK5002C
 Potentiometer_Analog rakeHeightSensor = Potentiometer_Analog(RAKEHEIGHT_PIN);
 UltrasonicSensor_MB1010 bushHeightSensor = UltrasonicSensor_MB1010(BUSHHEIGHT_PIN);
 
+// Sensor Information
+const int DIVISIONS_OF_RAKE_WHEEL = 2;  // AKA the number of magnets on the rake
+const float RADIUS_OF_RAKE_WHEEL = 0.1;  // Meters
+
+const int DIVISIONS_OF_HARVESTER_WHEEL = 2;  // AKA the number of magnets on the rake
+const float RADIUS_OF_HARVESTER_WHEEL = 0.1;  // Meters
+
+const float HEIGHT_OF_RAKE = 0.3;  // Meters
+const int MAX_VALUE_OF_RAKE_HEIGHT = 1000;  // Used for clamping sensor values
+const int MIN_VALUE_OF_RAKE_HEIGHT = 0;  // Used for clamping sensor values
+
+const float BUSH_HEIGHT_CALIBRATION_FACTOR = 1;  // calibration factor for the ultrasonic sensor
+
+const float LENGTH_OF_RAKE_TEETH = 0.4;  //
+const float ANGLE_OF_INCLINATION_OF_RAKE = 0.1;  //
 // Define sensors map that holds all sensors
 std::map<std::string, std::unique_ptr<Sensor>> sensors;
 
@@ -32,6 +47,7 @@ const char*  configurationCharacteristicUUID = "19B10001-c45f-478d-bf47-257959fe
 const char*  optimalOperationCharacteristicUUID = "19B10001-O45f-478d-bf47-O104768A1214";
 BLEService sensorDataService(serviceUUID);
 BLEDevice central;
+const int CHARACTERISTIC_BUFFER_SIZE = 255;
 // Elapsed time
 uint64_t dt = 0;
 
@@ -63,8 +79,8 @@ void sensorSetup() {
 }
 
 // #define DEBUG
-void terminalPrint(float rakeRPM, float harvesterLinearSpeed, float rakeHeight, float blueberryBushHeight) {
-  if (millis() - dt > 100) {
+void terminalPrint(float rakeRPM, float harvesterLinearSpeed, float rakeHeight, float blueberryBushHeight, int delay) {
+  if (millis() - dt > delay) {
     dt = millis();
     // This is debug code to test the functionality of sensors
     #ifdef DEBUG
@@ -96,13 +112,17 @@ void setup() {
   bleCommunication = BluetoothCommunication(deviceName, &sensorDataService);
   // Add BLE Characteristics
   // Live Data
-  bleCommunication.addCharacteristicToList(sensorDataCharacteristicUUID, BLERead | BLENotify, 255);
+  bleCommunication.addCharacteristicToList(sensorDataCharacteristicUUID,
+  BLERead | BLENotify, CHARACTERISTIC_BUFFER_SIZE);
   // Raw Data
-  bleCommunication.addCharacteristicToList(sensorRawDataCharacteristicUUID, BLERead | BLENotify, 255);
+  bleCommunication.addCharacteristicToList(sensorRawDataCharacteristicUUID,
+  BLERead | BLENotify, CHARACTERISTIC_BUFFER_SIZE);
   // Optimal Operation data
-  bleCommunication.addCharacteristicToList(optimalOperationCharacteristicUUID, BLERead | BLENotify, 255);
+  bleCommunication.addCharacteristicToList(optimalOperationCharacteristicUUID,
+  BLERead | BLENotify, CHARACTERISTIC_BUFFER_SIZE);
   //
-  bleCommunication.addCharacteristicToList(configurationCharacteristicUUID, BLERead | BLEWrite | BLENotify, 255);
+  bleCommunication.addCharacteristicToList(configurationCharacteristicUUID,
+  BLERead | BLEWrite | BLENotify, CHARACTERISTIC_BUFFER_SIZE);
   // Setup BLE service
   bleCommunication.begin();
   // Sets up sensors defined globaly
@@ -118,6 +138,7 @@ void loop() {
   BLE.poll();
   // Check for connection
   central = BLE.central();
+  int debugPrintDelay = 100;
   if (central) {
     Serial.print("Connected to central: ");
     Serial.println(central.address());
@@ -125,19 +146,22 @@ void loop() {
       // Data processing
       // Calculate the rotational speed of the rake
       float rawRakeSpeedSensor = rakeSpeedSensor.readData();
-      float rakeRPM = dataProcessing.calculateRakeRotationalSpeed(rawRakeSpeedSensor, 1, 0.1);
+      float rakeRPM = dataProcessing.calculateRakeRotationalSpeed(rawRakeSpeedSensor,
+      DIVISIONS_OF_RAKE_WHEEL, RADIUS_OF_RAKE_WHEEL);
       // Calculate the height of the rake
       float rawRakeHeightSensor = rakeHeightSensor.readData();
-      float rakeHeight = dataProcessing.calculateRakeHeight(rawRakeHeightSensor, 0.3, 1000, 0);
+      float rakeHeight = dataProcessing.calculateRakeHeight(rawRakeHeightSensor,
+      HEIGHT_OF_RAKE, MAX_VALUE_OF_RAKE_HEIGHT, MIN_VALUE_OF_RAKE_HEIGHT);
       // Calculate the height of the rake
       float rawBushHeightSensor = bushHeightSensor.readData();
-      float blueberryBushHeight = dataProcessing.calculateBushHeight(rawBushHeightSensor, 1);
+      float blueberryBushHeight = dataProcessing.calculateBushHeight(rawBushHeightSensor,
+      BUSH_HEIGHT_CALIBRATION_FACTOR);
       // Calculate the linear speed of the harvester
       float rawHarvesterLinearSpeedSensor = harvesterLinearSpeedSensor.readData();
       float harvesterLinearSpeed = dataProcessing.calculateHavesterLinearSpeed(
-        rawHarvesterLinearSpeedSensor, 1, 0.2);
+        rawHarvesterLinearSpeedSensor, DIVISIONS_OF_HARVESTER_WHEEL, RADIUS_OF_HARVESTER_WHEEL);
       // Debugging
-      terminalPrint(rakeRPM, rakeHeight, blueberryBushHeight, harvesterLinearSpeed);
+      terminalPrint(rakeRPM, rakeHeight, blueberryBushHeight, harvesterLinearSpeed, debugPrintDelay);
       // Update BLE characteristic with sensor data
       String sensorData = "{\"RPM\": "+String(rakeRPM) + ","
       + "\"Rake Height\": " + String(rakeHeight) + ","
@@ -151,7 +175,8 @@ void loop() {
       + "\"Raw Speed\":" + String(rawHarvesterLinearSpeedSensor) + "}";
 
       // Update the optimal Opeartion BLE Charateritic
-      float optimalRakeHeight = dataInterpretation.optimalRakeHeight(blueberryBushHeight, 0.4, 0.1, 0.125, rakeRPM);
+      float optimalRakeHeight = dataInterpretation.optimalRakeHeight(blueberryBushHeight, LENGTH_OF_RAKE_TEETH,
+      ANGLE_OF_INCLINATION_OF_RAKE, RADIUS_OF_RAKE_WHEEL, rakeRPM);
       float optimalRakeRotationSpeed = dataInterpretation.optimalRakeRotationSpeed(rakeHeight, blueberryBushHeight,
       rakeRPM, harvesterLinearSpeed);
 
@@ -162,27 +187,30 @@ void loop() {
       bleCommunication.writeCharacteristic(sensorDataCharacteristicUUID, sensorData.c_str());
       bleCommunication.writeCharacteristic(sensorRawDataCharacteristicUUID, rawSensorData.c_str());
       bleCommunication.writeCharacteristic(optimalOperationCharacteristicUUID, optimalOperationData.c_str());
-      bleCommunication.receivedDataCharacteristic(configurationCharacteristicUUID, buffer, 255);
+      bleCommunication.receivedDataCharacteristic(configurationCharacteristicUUID, buffer, CHARACTERISTIC_BUFFER_SIZE);
     }
     // When the central disconnects, print a message
     Serial.print("Disconnected from central: ");
     Serial.println(central.address());
   } else {
-     // Data processing
-     // Calculate the rotational speed of the rake
+      // Data processing
+      // Calculate the rotational speed of the rake
       float rawRakeSpeedSensor = rakeSpeedSensor.readData();
-      float rakeRPM = dataProcessing.calculateRakeRotationalSpeed(rawRakeSpeedSensor, 1, 0.1);
+      float rakeRPM = dataProcessing.calculateRakeRotationalSpeed(rawRakeSpeedSensor,
+      DIVISIONS_OF_RAKE_WHEEL, RADIUS_OF_RAKE_WHEEL);
       // Calculate the height of the rake
       float rawRakeHeightSensor = rakeHeightSensor.readData();
-      float rakeHeight = dataProcessing.calculateRakeHeight(rawRakeHeightSensor, 0.3, 1000, 0);
+      float rakeHeight = dataProcessing.calculateRakeHeight(rawRakeHeightSensor,
+      HEIGHT_OF_RAKE, MAX_VALUE_OF_RAKE_HEIGHT, MIN_VALUE_OF_RAKE_HEIGHT);
       // Calculate the height of the rake
       float rawBushHeightSensor = bushHeightSensor.readData();
-      float blueberryBushHeight = dataProcessing.calculateBushHeight(rawBushHeightSensor, 1);
+      float blueberryBushHeight = dataProcessing.calculateBushHeight(rawBushHeightSensor,
+      BUSH_HEIGHT_CALIBRATION_FACTOR);
       // Calculate the linear speed of the harvester
       float rawHarvesterLinearSpeedSensor = harvesterLinearSpeedSensor.readData();
       float harvesterLinearSpeed = dataProcessing.calculateHavesterLinearSpeed(
-        rawHarvesterLinearSpeedSensor, 1, 0.2);
+        rawHarvesterLinearSpeedSensor, DIVISIONS_OF_HARVESTER_WHEEL, RADIUS_OF_HARVESTER_WHEEL);
       // Debugging
-      terminalPrint(rakeRPM, rakeHeight, blueberryBushHeight, harvesterLinearSpeed);
+      terminalPrint(rakeRPM, rakeHeight, blueberryBushHeight, harvesterLinearSpeed, debugPrintDelay);
   }
 }

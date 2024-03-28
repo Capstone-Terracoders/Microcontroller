@@ -1,4 +1,7 @@
 #include "./DataProcessing/DataProcessing.h"
+DataProcessing::DataProcessing(){}
+DataProcessing::~DataProcessing(){}
+
 DataProcessing::DataProcessing(float rakeSpeedTimeOut, float harvesterSpeedTimeOut) {
     _rakeSpeedTimeOut = rakeSpeedTimeOut;
     _harvesterSpeedTimeOut = harvesterSpeedTimeOut;
@@ -39,7 +42,7 @@ float DataProcessing::calculateRakeRotationalSpeed(int rakeRotationSpeedData, in
 float radiusOfRake) {
     int64_t current_time = millis();
     int64_t elapsed_time = current_time - _tprev_RakeRotationalSpeed;
-
+    // Serial.println("Called");
     // If the _dt has not been set, set it to the current time
     if (_tprev_RakeRotationalSpeed <= 0) {
         _tprev_RakeRotationalSpeed = current_time;
@@ -63,7 +66,6 @@ float radiusOfRake) {
     return _rakeRotationalSpeed;
 }
 
-
 // Linear speed of the harvester m/s
 // harvesterLinearSpeedData: 1 if the harvester has rotated once, 0 if the harvester has not rotated
 // divisionOfCircle: The number of divisions in the circle
@@ -75,13 +77,13 @@ float radiusOfHavesterWheel) {
     int64_t elapsed_time = current_time - _tprev_HarvesterLinearSpeed;
     // If the _dt has not been set, set it to the current time
     if (_tprev_HarvesterLinearSpeed <= 0) {
-        _tprev_HarvesterLinearSpeed = millis();
+        _tprev_HarvesterLinearSpeed = current_time;
         return _harvesterLinearSpeed;
     }
     // Rake has rotated once, calculate the rotational speed
     if (harvesterLinearSpeedData == 0 && !_harvesterLinearSpeedSwitch) {
         // calculate Miliseconds per rotation
-        int64_t current_time = millis();
+        // int64_t current_time = millis();
         _dt_HarvesterLinearSpeed = elapsed_time;
         _tprev_HarvesterLinearSpeed = current_time;
         // convert to seconds

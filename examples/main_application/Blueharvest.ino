@@ -1,5 +1,5 @@
 #include "Arduino.h"
-#include "WildBlueberrySensorSystem.h"
+#include <WildBlueberrySensorSystem.h>
 #include "ArduinoBLE.h"
 // Define sensors pin locations
 #define RAKESPEED_PIN 8

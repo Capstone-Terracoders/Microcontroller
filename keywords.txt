@@ -1,0 +1,44 @@
+#######################################
+# Syntax Coloring Map For WildBlueberrySensorSystem
+#######################################
+
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+
+WildBlueberrySensorSystem	KEYWORD1
+Sensor	KEYWORD1
+
+UltrasonicSensor	KEYWORD1
+UltrasonicSensor_MB1010	KEYWORD1
+UltrasonicSensor_HCSR04	KEYWORD1
+
+Potentiometer	KEYWORD1
+Potentiometer_Analog	KEYWORD1
+
+HallEffectSensor	KEYWORD1
+HallEffectSensor_NJK5002C	KEYWORD1
+
+DataProcessing	KEYWORD1
+
+DataInterpretation	KEYWORD1
+
+BluetoothCommunication	KEYWORD1
+
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+
+begin	KEYWORD2
+poll	KEYWORD2
+end	KEYWORD2
+
+connected	KEYWORD2
+disconnect	KEYWORD2
+
+#######################################
+# Constants (LITERAL1)
+#######################################
+
+BLEConnected	LITERAL1
+BLEDisconnected	LITERAL1

@@ -1,5 +1,5 @@
-#include "Arduino.h"
 #include <WildBlueberrySensorSystem.h>
+#include "Arduino.h"
 #include "ArduinoBLE.h"
 // Define sensors pin locations
 #define RAKESPEED_PIN 8
@@ -40,11 +40,11 @@ DataInterpretation dataInterpretation;
 // Bluetooth Communication
 BluetoothCommunication bleCommunication;
 const char*  deviceName = "WildBlueberrySensorSystem";
-const char*  serviceUUID = "DA00";  // Sensor Data Service
-const char*  sensorDataCharacteristicUUID = "19B10001-E8F2-537E-4F6C-D104768A1214";
-const char*  sensorRawDataCharacteristicUUID = "19B10001-E8F2-537E-4F6C-R104768A1214";
-const char*  configurationCharacteristicUUID = "19B10001-c45f-478d-bf47-257959fedb0a";
-const char*  optimalOperationCharacteristicUUID = "19B10001-O45f-478d-bf47-O104768A1214";
+const char*  serviceUUID = "19B10001-E8F2-537E-4F6C-0004768A1214";  // Sensor Data Service
+const char*  sensorDataCharacteristicUUID = "00002A37-0000-1000-8000-00805F9B34FB";
+const char*  sensorRawDataCharacteristicUUID = "0000C0DE-0000-1000-8000-00805F9B34FB";
+const char*  configurationCharacteristicUUID = "0000BEEF-0000-1000-8000-00805F9B34FB";
+const char*  optimalOperationCharacteristicUUID = "0000FADE-0000-1000-8000-00805F9B34FB";
 BLEService sensorDataService(serviceUUID);
 BLEDevice central;
 const int CHARACTERISTIC_BUFFER_SIZE = 255;
@@ -163,16 +163,16 @@ void loop() {
       // Debugging
       terminalPrint(rakeRPM, rakeHeight, blueberryBushHeight, harvesterLinearSpeed, debugPrintDelay);
       // Update BLE characteristic with sensor data
-      String sensorData = "{\"RPM\": "+String(rakeRPM) + ","
-      + "\"Rake Height\": " + String(rakeHeight) + ","
-      + "\"Bush Height\": " +String(blueberryBushHeight) + ","
-      + "\"Speed\": " +String(harvesterLinearSpeed) + "}";
+      String sensorData = "{\"0\": "+String(rakeRPM) + ","
+      + "\"1\": " + String(rakeHeight) + ","
+      + "\"2\": " +String(blueberryBushHeight) + ","
+      + "\"3\": " +String(harvesterLinearSpeed) + "}";
 
       // Update BLE Characteristics
-      String rawSensorData = "{\"Raw RPM\":" + String(rawRakeSpeedSensor) + ","
-      + "\"Raw Rake Height\":" + String(rawRakeHeightSensor) + ","
-      + "\"Raw Bush Height\":" + String(rawBushHeightSensor) + ","
-      + "\"Raw Speed\":" + String(rawHarvesterLinearSpeedSensor) + "}";
+      String rawSensorData = "{\"0\":" + String(rawRakeSpeedSensor) + ","
+      + "\"1\":" + String(rawRakeHeightSensor) + ","
+      + "\"2\":" + String(rawBushHeightSensor) + ","
+      + "\"3\":" + String(rawHarvesterLinearSpeedSensor) + "}";
 
       // Update the optimal Opeartion BLE Charateritic
       float optimalRakeHeight = dataInterpretation.optimalRakeHeight(blueberryBushHeight, LENGTH_OF_RAKE_TEETH,
@@ -211,6 +211,6 @@ void loop() {
       float harvesterLinearSpeed = dataProcessing.calculateHavesterLinearSpeed(
         rawHarvesterLinearSpeedSensor, DIVISIONS_OF_HARVESTER_WHEEL, RADIUS_OF_HARVESTER_WHEEL);
       // Debugging
-      terminalPrint(rakeRPM, rakeHeight, blueberryBushHeight, harvesterLinearSpeed, debugPrintDelay);
+      terminalPrint(rakeRPM, harvesterLinearSpeed, rakeHeight, blueberryBushHeight, debugPrintDelay);
   }
 }

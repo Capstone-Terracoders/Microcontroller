@@ -1,4 +1,4 @@
-# Terracode: Microcontroller Applicatoin Repository
+# Terracode: Microcontroller Application Repository
 Repository for the microcontroller.
 ## Programmers:
  * Alexandra Gale 
@@ -9,7 +9,7 @@ Repository for the microcontroller.
 <br>Main repository for the COS-497 capstone project for Dr. Bashir Khoda.
 
 ### Project Overview: 
-<br> Blueberry harvestor system.
+<br> Blueberry harvester system.
 
 ### Requirements:
 <br>Download Arduino IDE: https://www.arduino.cc/en/software

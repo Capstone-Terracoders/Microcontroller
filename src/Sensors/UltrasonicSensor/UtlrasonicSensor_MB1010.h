@@ -19,8 +19,8 @@
 //  Gray    - AN (analog)
 //  Purple  - PW (pulse width)
 //  Blue    - BW ()
-#ifndef INCLUDE_SENSORS_ULTRASONICSENSOR_UTLRASONICSENSOR_MB1010_H_
-#define INCLUDE_SENSORS_ULTRASONICSENSOR_UTLRASONICSENSOR_MB1010_H_
+#ifndef SRC_SENSORS_ULTRASONICSENSOR_UTLRASONICSENSOR_MB1010_H_
+#define SRC_SENSORS_ULTRASONICSENSOR_UTLRASONICSENSOR_MB1010_H_
 
 #include "UltrasonicSensor.h"
 class UltrasonicSensor_MB1010 : public UltrasonicSensor {
@@ -40,4 +40,4 @@ class UltrasonicSensor_MB1010 : public UltrasonicSensor {
  private:
     int _data_pin = A5;  // echo pin receives the signal
 };
-#endif  // INCLUDE_SENSORS_ULTRASONICSENSOR_UTLRASONICSENSOR_MB1010_H_
+#endif  // SRC_SENSORS_ULTRASONICSENSOR_UTLRASONICSENSOR_MB1010_H_

@@ -2,8 +2,8 @@
 // Class: ReadSensorData
 // Description: This class is used to read the sensor data from the sensors
 //
-#ifndef INCLUDE_DATAPROCESSING_DATAPROCESSING_H_
-#define INCLUDE_DATAPROCESSING_DATAPROCESSING_H_
+#ifndef SRC_DATAPROCESSING_DATAPROCESSING_H_
+#define SRC_DATAPROCESSING_DATAPROCESSING_H_
 #include <math.h>
 #include <Arduino.h>
 
@@ -45,5 +45,7 @@ class DataProcessing {
     bool _harvesterLinearSpeedSwitch = false;
     float _rakeSpeedTimeOut = 10.0f;  // Time out for the rake speed - seconds
     float _harvesterSpeedTimeOut = 10.0f;  // Time out for the harvester speed - seconds
+    int _prevRakeRotationalSpeedData = 0;
+    int _prevHarvesterSpeedData = 0;
 };
-#endif  // INCLUDE_DATAPROCESSING_DATAPROCESSING_H_
+#endif  // SRC_DATAPROCESSING_DATAPROCESSING_H_

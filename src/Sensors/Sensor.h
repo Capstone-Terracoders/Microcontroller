@@ -2,8 +2,8 @@
 // Class: Sensor
 // Description: This class defines the interface for a Sensor
 //
-#ifndef INCLUDE_SENSORS_SENSOR_H_
-#define INCLUDE_SENSORS_SENSOR_H_
+#ifndef SRC_SENSORS_SENSOR_H_
+#define SRC_SENSORS_SENSOR_H_
 
 #include "Arduino.h"
 #include <iostream>
@@ -39,4 +39,4 @@ class Sensor {
     std::string _name;
     std::string _id;
 };
-#endif  // INCLUDE_SENSORS_SENSOR_H_
+#endif  // SRC_SENSORS_SENSOR_H_

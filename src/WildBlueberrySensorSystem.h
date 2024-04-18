@@ -3,8 +3,8 @@
 // Description: This class is used as a standard library for the WildBlueberrySensorSystem
 // It incldues all needed header files for the WildBlueberrySensorSystem
 //
-#ifndef INCLUDE_WILDBLUEBERRYSENSORSYSTEM_H_
-#define INCLUDE_WILDBLUEBERRYSENSORSYSTEM_H_
+#ifndef SRC_WILDBLUEBERRYSENSORSYSTEM_H_
+#define SRC_WILDBLUEBERRYSENSORSYSTEM_H_
 
 #include <map>
 #include <memory>
@@ -18,4 +18,4 @@
 
 #include "./DataInterpretation/DataInterpretation.h"
 
-#endif  // INCLUDE_WILDBLUEBERRYSENSORSYSTEM_H_
+#endif  // SRC_WILDBLUEBERRYSENSORSYSTEM_H_

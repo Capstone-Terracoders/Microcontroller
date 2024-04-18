@@ -161,7 +161,7 @@ void loop() {
       float harvesterLinearSpeed = dataProcessing.calculateHavesterLinearSpeed(
         rawHarvesterLinearSpeedSensor, DIVISIONS_OF_HARVESTER_WHEEL, RADIUS_OF_HARVESTER_WHEEL);
       // Debugging
-      terminalPrint(rakeRPM, rakeHeight, blueberryBushHeight, harvesterLinearSpeed, debugPrintDelay);
+      terminalPrint(rawRakeSpeedSensor, rakeHeight, blueberryBushHeight, harvesterLinearSpeed, debugPrintDelay);
       // Update BLE characteristic with sensor data
       String sensorData = "{\"0\": "+String(rakeRPM) + ","
       + "\"1\": " + String(rakeHeight) + ","

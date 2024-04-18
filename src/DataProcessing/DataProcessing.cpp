@@ -48,8 +48,10 @@ float radiusOfRake) {
         _tprev_RakeRotationalSpeed = current_time;
         return _rakeRotationalSpeed;
     }
-    // Rake has rotated once, calculate the rotational speed
-    if (rakeRotationSpeedData == 0 && !_rakeRotationalSpeedSwitch) {
+    // Check for the timeout
+    if (_rakeSpeedTimeOut < (elapsed_time) / MILISECONDS_TO_SECONDS) {
+        _rakeRotationalSpeed = 0;
+    } else {
         // calculate Miliseconds per rotation
         _dt_RakeRotationalSpeed = elapsed_time;
         _tprev_RakeRotationalSpeed = current_time;
@@ -57,11 +59,8 @@ float radiusOfRake) {
         float minutes = static_cast<float>(_dt_RakeRotationalSpeed) / MILISECONDS_TO_MINUTES;
         _rakeRotationalSpeedSwitch = true;
         // calculate RMP of rake
-        _rakeRotationalSpeed = divisionOfCircle / (minutes);
-    } else if (rakeRotationSpeedData == 1 && _rakeRotationalSpeedSwitch) {
-        _rakeRotationalSpeedSwitch = false;
-    } else if (_rakeSpeedTimeOut < (elapsed_time) / MILISECONDS_TO_SECONDS) {
-        _rakeRotationalSpeed = 0;
+        _rakeRotationalSpeed = ((rakeRotationSpeedData-_prevRakeRotationalSpeedData)/divisionOfCircle) / (minutes);
+        _prevRakeRotationalSpeedData = rakeRotationSpeedData;
     }
     return _rakeRotationalSpeed;
 }
@@ -80,6 +79,22 @@ float radiusOfHavesterWheel) {
         _tprev_HarvesterLinearSpeed = current_time;
         return _harvesterLinearSpeed;
     }
+        // Check for the timeout
+    if (_harvesterSpeedTimeOut < (elapsed_time) / MILISECONDS_TO_SECONDS) {
+        _harvesterLinearSpeed = 0;
+    } else {
+        // calculate Miliseconds per rotation
+        _dt_HarvesterLinearSpeed = elapsed_time;
+        _tprev_HarvesterLinearSpeed = current_time;
+        // convert to seconds
+        float seconds = static_cast<float>(_dt_HarvesterLinearSpeed) / MILISECONDS_TO_SECONDS;
+        _harvesterLinearSpeedSwitch = true;
+        // calculate Speed of harvester
+        int numberOfRotations = harvesterLinearSpeedData - _prevHarvesterSpeedData; 
+        _harvesterLinearSpeed = (((2*radiusOfHavesterWheel*M_PI)*numberOfRotations)/divisionOfCircle) / seconds;
+        _prevHarvesterSpeedData = harvesterLinearSpeedData;
+    }
+
     // Rake has rotated once, calculate the rotational speed
     if (harvesterLinearSpeedData == 0 && !_harvesterLinearSpeedSwitch) {
         // calculate Miliseconds per rotation

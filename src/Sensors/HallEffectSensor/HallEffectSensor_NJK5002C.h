@@ -6,8 +6,8 @@
 //  Blue - ground
 //  Black - Vout
 //  Brown - Vcc (5V)
-#ifndef INCLUDE_SENSORS_HALLEFFECTSENSOR_HALLEFFECTSENSOR_NJK5002C_H_
-#define INCLUDE_SENSORS_HALLEFFECTSENSOR_HALLEFFECTSENSOR_NJK5002C_H_
+#ifndef SRC_SENSORS_HALLEFFECTSENSOR_HALLEFFECTSENSOR_NJK5002C_H_
+#define SRC_SENSORS_HALLEFFECTSENSOR_HALLEFFECTSENSOR_NJK5002C_H_
 #include "HallEffectSensor.h"
 class HallEffectSensor_NJK5002C : public HallEffectSensor {
  public:
@@ -24,11 +24,11 @@ class HallEffectSensor_NJK5002C : public HallEffectSensor {
     int getPin();
     // Mutators
     void setPin(const int &pin);
-    // Interrupt Handlers 
+    // Interrupt Handlers
     void callInterrupt();
     void resetCounter();
  private:
     int _pin = 0;
     int _triggeredCount = 0;
 };
-#endif  // INCLUDE_SENSORS_HALLEFFECTSENSOR_HALLEFFECTSENSOR_NJK5002C_H_
+#endif  // SRC_SENSORS_HALLEFFECTSENSOR_HALLEFFECTSENSOR_NJK5002C_H_

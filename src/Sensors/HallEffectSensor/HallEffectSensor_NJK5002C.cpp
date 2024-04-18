@@ -22,9 +22,9 @@ void HallEffectSensor_NJK5002C::setPin(const int &pin) {
     this->_pin = pin;
 }
 
-void HallEffectSensor_NJK5002C::resetCounter(){
+void HallEffectSensor_NJK5002C::resetCounter() {
     _triggeredCount = 0;
 }
-void HallEffectSensor_NJK5002C::callInterrupt(){
-    _triggeredCount+=1; 
+void HallEffectSensor_NJK5002C::callInterrupt() {
+    _triggeredCount+=1;
 }

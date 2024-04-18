@@ -1,6 +1,6 @@
 #include "./DataProcessing/DataProcessing.h"
-DataProcessing::DataProcessing(){}
-DataProcessing::~DataProcessing(){}
+DataProcessing::DataProcessing() {}
+DataProcessing::~DataProcessing() {}
 
 DataProcessing::DataProcessing(float rakeSpeedTimeOut, float harvesterSpeedTimeOut) {
     _rakeSpeedTimeOut = rakeSpeedTimeOut;
@@ -90,7 +90,7 @@ float radiusOfHavesterWheel) {
         float seconds = static_cast<float>(_dt_HarvesterLinearSpeed) / MILISECONDS_TO_SECONDS;
         _harvesterLinearSpeedSwitch = true;
         // calculate Speed of harvester
-        int numberOfRotations = harvesterLinearSpeedData - _prevHarvesterSpeedData; 
+        int numberOfRotations = harvesterLinearSpeedData - _prevHarvesterSpeedData;
         _harvesterLinearSpeed = (((2*radiusOfHavesterWheel*M_PI)*numberOfRotations)/divisionOfCircle) / seconds;
         _prevHarvesterSpeedData = harvesterLinearSpeedData;
     }

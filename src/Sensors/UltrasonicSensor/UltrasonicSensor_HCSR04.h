@@ -1,5 +1,5 @@
-#ifndef INCLUDE_SENSORS_ULTRASONICSENSOR_ULTRASONICSENSOR_HCSR04_H_
-#define INCLUDE_SENSORS_ULTRASONICSENSOR_ULTRASONICSENSOR_HCSR04_H_
+#ifndef SRC_SENSORS_ULTRASONICSENSOR_ULTRASONICSENSOR_HCSR04_H_
+#define SRC_SENSORS_ULTRASONICSENSOR_ULTRASONICSENSOR_HCSR04_H_
 #include "UltrasonicSensor.h"
 class UltrasonicSensor_HCSR04 : public UltrasonicSensor {
  public:
@@ -24,4 +24,4 @@ class UltrasonicSensor_HCSR04 : public UltrasonicSensor {
     int _echo_pin = 0;    // echo pin receives the signal
     int _trigger_pin = 1;  // trigger pin transmits the signal
 };
-#endif  // INCLUDE_SENSORS_ULTRASONICSENSOR_ULTRASONICSENSOR_HCSR04_H_
+#endif  // SRC_SENSORS_ULTRASONICSENSOR_ULTRASONICSENSOR_HCSR04_H_

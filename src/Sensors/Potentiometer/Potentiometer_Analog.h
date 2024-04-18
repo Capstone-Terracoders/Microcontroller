@@ -2,8 +2,8 @@
 // Class: Potentiometer_Analog class
 // Description: This class is used to read data from an analog potentiometer
 //
-#ifndef INCLUDE_SENSORS_POTENTIOMETER_POTENTIOMETER_ANALOG_H_
-#define INCLUDE_SENSORS_POTENTIOMETER_POTENTIOMETER_ANALOG_H_
+#ifndef SRC_SENSORS_POTENTIOMETER_POTENTIOMETER_ANALOG_H_
+#define SRC_SENSORS_POTENTIOMETER_POTENTIOMETER_ANALOG_H_
 #include "Potentiometer.h"
 
 class Potentiometer_Analog : public Potentiometer {
@@ -24,4 +24,4 @@ class Potentiometer_Analog : public Potentiometer {
  private:
     int _data_pin = 0;
 };
-#endif  // INCLUDE_SENSORS_POTENTIOMETER_POTENTIOMETER_ANALOG_H_
+#endif  // SRC_SENSORS_POTENTIOMETER_POTENTIOMETER_ANALOG_H_
